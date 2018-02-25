@@ -1,10 +1,23 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
     <title>{% block title %}Programming Discord Server{% endblock %}</title>
-</head>
-<body>
 
+    <link rel="stylesheet" type="text/css" href="{% static 'css/kube.css' %}" />
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+<div class="container">
+<nav class="row">
+    <div class="col col-8 offset-2">
+        <code class="monospace label text-left">you@programming$</code>
+    </div>
+</nav>
+{% block body %}{% endblock %}
+</div>
 </body>
 </html>
