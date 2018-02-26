@@ -1,4 +1,5 @@
 {% load static %}
+{% load socialaccount %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,7 +15,21 @@
 <div class="container">
 <nav class="row">
     <div class="col col-8 offset-2">
-        <code class="monospace label text-left">you@programming$</code>
+        <code class="monospace label text-left">
+        {% if user.is_authenticated %}
+            {# If the user has their Discord account connected, show that #}
+            {% if user.first_name %}
+                {# TODO: Once we added user profiles, add a link to it here #}
+                {{ user.first_name }}@programming$
+            {# Otherwise, show the username from the django.contrib.auth framework #}
+            {% else %}
+                {{ user.username }}@programming$
+            {% endif %}
+        {# If the user is not connected at all, provide a link to Discord OAuth #}
+        {% else %}
+            <a class="black" href="{% provider_login_url 'discord' %}">you</a>@programming$
+        {% endif %}
+        </code>
     </div>
 </nav>
 {% block body %}{% endblock %}
