@@ -18,16 +18,11 @@
         <code class="monospace label text-left">
         {% if user.is_authenticated %}
             {# If the user has their Discord account connected, show that #}
-            {% if user.first_name %}
-                {# TODO: Once we added user profiles, add a link to it here #}
-                {{ user.first_name }}@programming$
-            {# Otherwise, show the username from the django.contrib.auth framework #}
-            {% else %}
-                {{ user.username }}@programming$
-            {% endif %}
-        {# If the user is not connected at all, provide a link to Discord OAuth #}
+            {# TODO: Once we added user profiles, add a link to it here #}
+            <span class="black strong">{{ user.first_name }}</span>@programming$
         {% else %}
-            <a class="black" href="{% provider_login_url 'discord' %}">you</a>@programming$
+            {# If the user is not connected at all, provide a link to Discord OAuth #}
+            <a class="black strong" href="{% provider_login_url 'discord' next='/' %}">$(YOUR_NAME)</a>@programming$
         {% endif %}
         </code>
     </div>

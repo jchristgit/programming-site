@@ -52,11 +52,6 @@ AUTHENTICATION_BACKENDS = (
     'allauth.account.auth_backends.AuthenticationBackend'
 )
 
-SOCIALACCOUNT_PROVIDERS = {
-    'discord': {
-        'SCOPE': ['identify', 'guilds']
-    }
-}
 SOCIALACCOUNT_EMAIL_VERIFICATION = "none"
 
 LOGIN_REDIRECT_URL = '/'
@@ -85,7 +80,7 @@ TEMPLATES = [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+                'django.contrib.messages.context_processors.messages'
             ],
         },
     },
