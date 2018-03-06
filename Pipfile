@@ -12,7 +12,7 @@ name = "pypi"
 [packages]
 
 django = "*"
-django-allauth = "*"
+allauth = {git = "https://github.com/Volcyy/django-allauth"}
 
 
 [requires]
