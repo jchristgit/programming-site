@@ -11,9 +11,9 @@ name = "pypi"
 
 [packages]
 
-django = "*"
+django = "==2.0.3"
 allauth = {git = "https://github.com/Volcyy/django-allauth"}
-requests = "*"
+requests = "==2.18.4"
 
 
 [requires]
