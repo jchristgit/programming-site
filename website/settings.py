@@ -66,6 +66,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'custom_anonymous.middleware.AuthenticationMiddleware'
 ]
 
 ROOT_URLCONF = 'website.urls'
@@ -143,3 +144,6 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'website', 'static')
 ]
 SITE_ID = 1
+
+AUTH_ANONYMOUS_MODEL = 'home.users.CustomAnonymousUser'
+AUTH_USER_MODEL = 'home.User'

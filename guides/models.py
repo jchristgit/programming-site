@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -12,4 +13,4 @@ class Guide(models.Model):
     content = models.TextField()
     pub_datetime = models.DateTimeField(auto_now_add=True, editable=False)
     edit_datetime = models.DateTimeField(auto_now=True, editable=False)
-    author = models.ForeignKey(User, on_delete=models.PROTECT)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
