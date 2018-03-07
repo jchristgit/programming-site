@@ -1,6 +1,11 @@
-from django.shortcuts import render
+from django.views import generic
+
+from .models import Guide
 
 
-# Create your views here.
-def index(request):
-    return render(request, 'guides/index.html')
+class IndexView(generic.ListView):
+    context_object_name = 'latest_guides'
+    template_name = 'guides/index.html'
+
+    def get_queryset(self):
+        return Guide.objects.order_by('-pub_datetime')
