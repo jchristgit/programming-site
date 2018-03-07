@@ -28,6 +28,13 @@
         {% endif %}
         </code>
     </div>
+    <div class="col push-center">
+        <a href="{% url 'home:index' %}">Home</a>
+        &nbsp;
+        <a href="{% url 'guides:index' %}">Guides</a>
+        &nbsp;
+        <a href="#">Statistics</a>
+    </div>
 </nav>
 {% block body %}{% endblock %}
 </body>
