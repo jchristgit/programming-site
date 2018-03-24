@@ -1,6 +1,6 @@
 import datetime
 
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
@@ -28,7 +28,9 @@ class GuidesModelExistingGuidesTests(TestCase):
     def setUpTestData(cls):
         past = datetime.datetime(1982, 12, 5, 1, 4, 2, 3)
         now = datetime.datetime.now()
-        cls.author = User.objects.create_user("test", "test@test.com", "testpassword")
+        cls.author = get_user_model().objects.create_user(
+            "test", "test@test.com", "testpassword", discriminator=0000
+        )
         cls.guide_1 = Guide.objects.create(
             title="Test Guide", overview="test",
             content="test", author=cls.author,
