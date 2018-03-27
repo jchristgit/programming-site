@@ -10,7 +10,36 @@ class AnonymousUserHomeAppTests(TestCase):
     def test_index_status_200(self):
         self.assertEqual(self.client.get(reverse('home:index')).status_code, 200)
 
-    def test_user_attributes_properly_set(self):
+    def test_context_user_attributes_properly_set(self):
+        res = self.client.get(reverse('home:index'))
+        user = res.context['user']
+
+        self.assertTrue(user.is_anonymous)
+        self.assertFalse(user.is_authenticated)
+        self.assertFalse(user.is_member)
+        self.assertFalse(user.is_staff)
+        self.assertFalse(user.is_superuser)
+
+
+class AnonymousUserWithMemberInDatabaseHomeAppTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        set_up_oauth_test_data(cls, [{
+            'id': '181866934353133570',
+            'permissions': 0x63584c0
+        }])
+
+    def test_index_status_200(self):
+        self.assertEqual(self.client.get(reverse('home:index')).status_code, 200)
+
+    def test_created_user_attributes_properly_set(self):
+        self.assertTrue(self.user.is_anonymous)
+        self.assertFalse(self.user.is_authenticated)
+        self.assertFalse(self.user.is_member)
+        self.assertFalse(self.user.is_staff)
+        self.assertFalse(self.user.is_superuser)
+
+    def test_context_user_attributes_properly_set(self):
         res = self.client.get(reverse('home:index'))
         user = res.context['user']
 
@@ -32,7 +61,14 @@ class AuthenticatedUserHomeAppTests(TestCase):
     def test_index_status_200(self):
         self.assertEqual(self.client.get(reverse('home:index')).status_code, 200)
 
-    def test_user_attributes_properly_set(self):
+    def test_created_user_attributes_properly_set(self):
+        self.assertFalse(self.user.is_anonymous)
+        self.assertTrue(self.user.is_authenticated)
+        self.assertFalse(self.user.is_member)
+        self.assertFalse(self.user.is_staff)
+        self.assertFalse(self.user.is_superuser)
+
+    def test_context_user_attributes_properly_set(self):
         res = self.client.get(reverse('home:index'))
         user = res.context['user']
 
@@ -57,7 +93,14 @@ class GuestUserHomeAppTests(TestCase):
     def test_index_status_200(self):
         self.assertEqual(self.client.get(reverse('home:index')).status_code, 200)
 
-    def test_user_attributes_properly_set(self):
+    def test_created_user_attributes_properly_set(self):
+        self.assertFalse(self.user.is_anonymous)
+        self.assertTrue(self.user.is_authenticated)
+        self.assertFalse(self.user.is_member)
+        self.assertFalse(self.user.is_staff)
+        self.assertFalse(self.user.is_superuser)
+
+    def test_context_user_attributes_properly_set(self):
         res = self.client.get(reverse('home:index'))
         user = res.context['user']
 
@@ -82,11 +125,17 @@ class MemberUserHomeAppTests(TestCase):
     def test_index_status_200(self):
         self.assertEqual(self.client.get(reverse('home:index')).status_code, 200)
 
-    def test_user_attributes_properly_set(self):
+    def test_created_user_attributes_properly_set(self):
+        self.assertFalse(self.user.is_anonymous)
+        self.assertTrue(self.user.is_authenticated)
+        self.assertTrue(self.user.is_member)
+        self.assertFalse(self.user.is_staff)
+        self.assertFalse(self.user.is_superuser)
+
+    def test_context_user_attributes_properly_set(self):
         res = self.client.get(reverse('home:index'))
         user = res.context['user']
 
-        self.assertEqual(self.user, user)
         self.assertFalse(user.is_anonymous)
         self.assertTrue(user.is_authenticated)
         self.assertTrue(user.is_member)
@@ -108,7 +157,14 @@ class StaffUserHomeAppTests(TestCase):
     def test_index_status_200(self):
         self.assertEqual(self.client.get(reverse('home:index')).status_code, 200)
 
-    def test_user_attributes_properly_set(self):
+    def test_created_user_attributes_properly_set(self):
+        self.assertFalse(self.user.is_anonymous)
+        self.assertTrue(self.user.is_authenticated)
+        self.assertTrue(self.user.is_member)
+        self.assertTrue(self.user.is_staff)
+        self.assertTrue(self.user.is_superuser)
+
+    def test_context_user_attributes_properly_set(self):
         res = self.client.get(reverse('home:index'))
         user = res.context['user']
 
