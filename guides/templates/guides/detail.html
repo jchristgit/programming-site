@@ -1,11 +1,16 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+  <link rel="stylesheet" type="text/css" href="{% static 'guides/codehilite.min.css' %}" />
+{% endblock %}
 
 {% block body %}
   <br>
   <h1 class="title">{{ guide.title }}</h1>
   <i>written by {{ guide.author }}</i>
-  <br>
-  <article>
+  <hr>
+  <div>
     {{ guide.content }}
-  </article>
+  </div>
 {% endblock %}
