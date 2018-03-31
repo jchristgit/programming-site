@@ -1,22 +1,26 @@
 {% extends 'base.html' %}
 
 {% block body %}
-    <br>
-    <h2>Guides</h2>
-    <p class="large">Here we collect community-driven guides and tutorials for programming, our server, and more. Want to add something? Feel free to write your own!</p>
-    <div class="row gutters">
-        <div class="col col-12">
-            <h3>New Guides</h3>
-            {% for guide in latest_guides %}
-                <ul>
-                    <li>
-                        <b>{{ guide.title }}</b>
-                        <p>{{ guide.overview }}</p>
-                    </li>
-                </ul>
-            {% empty %}
-                <i>Hmm... Seems like there's nothing here yet.</i>
-            {% endfor %}
-        </div>
+  <br>
+  <h2>Guides</h2>
+  <p class="large">Here we collect community-driven guides and tutorials for programming, our server, and more. Want to add something? Feel free to write your own!</p>
+  <div class="row gutters">
+    <div class="col col-12">
+      <h3>New Guides</h3>
+        {% for guide in latest_guides %}
+          {% if forloop.first %}
+            <ul>
+          {% endif %}
+            <li>
+              <b>{{ guide.title }}</b>
+              <p>{{ guide.overview }}</p>
+            </li>
+          {% if forloop.last %}
+            </ul>
+          {% endif %}
+        {% empty %}
+          <i>Hmm... Seems like there's nothing here yet.</i>
+        {% endfor %}
     </div>
+  </div>
 {% endblock %}
