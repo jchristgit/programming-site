@@ -17,7 +17,7 @@
             <ul>
           {% endif %}
             <li>
-              <b>{{ guide.title }}</b>
+              <b><a href="{% url 'guides:detail' guide.id %}">{{ guide.title }}</a></b>
               <p>{{ guide.overview }}</p>
             </li>
           {% if forloop.last %}
