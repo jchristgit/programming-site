@@ -10,7 +10,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
+import functools
 import os
+
+import bleach
+import markdown
+from bleach_whitelist import markdown_attrs, markdown_tags
+from markdown.extensions.codehilite import CodeHiliteExtension
+from markdown.extensions.fenced_code import FencedCodeExtension
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -147,3 +154,21 @@ SITE_ID = 1
 
 AUTH_ANONYMOUS_MODEL = 'home.users.CustomAnonymousUser'
 AUTH_USER_MODEL = 'home.User'
+
+# django-markupfield configuration for syntax highlighting
+markdown_extensions = (
+    CodeHiliteExtension(),
+    FencedCodeExtension()
+)
+
+
+def _markdown(text):
+    return bleach.clean(
+        markdown.markdown(text, extensions=markdown_extensions),
+        markdown_tags, markdown_attrs
+    )
+
+
+MARKUP_FIELD_TYPES = [
+    ('markdown', _markdown)
+]

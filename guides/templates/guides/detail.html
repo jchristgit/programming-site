@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block body %}
+  <br>
+  <h1 class="title">{{ guide.title }}</h1>
+  <i>written by {{ guide.author }}</i>
+  <br>
+  <article>
+    {{ guide.content }}
+  </article>
+{% endblock %}
