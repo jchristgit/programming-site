@@ -14,8 +14,3 @@
 .no-underline {
     text-decoration: none;
 }
-
-html {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
