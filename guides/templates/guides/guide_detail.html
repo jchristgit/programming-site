@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+  <link rel="stylesheet" type="text/css" href="{% static 'guides/css/codehilite.min.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'guides/css/detail.css' %}" />
+{% endblock %}
+
+{% block body %}
+  <br>
+  <h2>{{ guide.title }}</h2>
+  <div class="author-info">
+    {# <img class="small author-image" src="{{ author_discord.avatar_url }}"> #}
+    <cite class="h5">written by {{ guide.author }} on {{ guide.pub_datetime|date }}</cite>
+  </div>
+  <hr>
+  <article>
+    {{ guide.content }}
+  </article>
+{% endblock %}

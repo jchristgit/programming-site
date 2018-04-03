@@ -1,0 +1,10 @@
+.author-info {
+    display: flex;
+    max-height: 2em;
+}
+
+.author-image {
+    border-radius: 100%;
+    border: 0.3em solid lightblue;
+}
+

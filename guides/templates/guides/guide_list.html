@@ -8,7 +8,7 @@
   <br>
   <div class="group">
     <h2 class="float-left">Guides</h2>
-    {% if user.is_member %}
+    {% if is_member %}
       <a class="float-right button" href="{% url 'guides:create' %}">Create</a>
     {% endif %}
   </div>
@@ -25,10 +25,12 @@
               <a class="no-underline" href="{% url 'guides:detail' guide.id %}">{{ guide.title }}</a>
             </h4>
           </div>
-          <div class="col push-right">
-            <a href="{% url 'guides:edit' guide.id %}" style="color:deepskyblue;text-decoration:none;">&#128394;</a>
-            <a href="{% url 'guides:delete' guide.id %}" class="h3" style="color:red;text-decoration:none;">&times;</a>
-          </div>
+          {% if guide.author == request.user or is_staff %}
+            <div class="col push-right">
+              <a href="{% url 'guides:edit' guide.id %}" style="color:deepskyblue;text-decoration:none;">&#128394;</a>
+              <a href="{% url 'guides:delete' guide.id %}" class="h3" style="color:red;text-decoration:none;">&times;</a>
+            </div>
+          {% endif %}
         </div>
         <p class="guide-list-item-subtitle muted"> written by {{ guide.author.username }} on {{ guide.pub_datetime|date }}</p>
         <p>{{ guide.overview }}</p>
