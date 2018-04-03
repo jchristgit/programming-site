@@ -16,6 +16,7 @@ from pathlib import Path
 import bleach
 import markdown
 from bleach_whitelist import markdown_attrs, markdown_tags
+from django.contrib.messages import constants as message_constants
 from markdown.extensions.codehilite import CodeHiliteExtension
 from markdown.extensions.fenced_code import FencedCodeExtension
 
@@ -169,3 +170,13 @@ def _markdown(text):
 MARKUP_FIELD_TYPES = [
     ('markdown', _markdown)
 ]
+
+
+# https://imperavi.com/kube/docs/messages/
+MESSAGE_TAGS = {
+    message_constants.DEBUG: '',
+    message_constants.INFO: '',
+    message_constants.SUCCESS: 'success',
+    message_constants.ERROR: 'error',
+    message_constants.WARNING: 'warning',
+}
