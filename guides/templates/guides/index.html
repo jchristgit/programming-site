@@ -19,7 +19,17 @@
       <ul class="guide-list">
     {% endif %}
       <li>
-        <h4 class="guide-list-item-title"><a class="no-underline" href="{% url 'guides:detail' guide.id %}">{{ guide.title }}</a></h4>
+        <div class="row">
+          <div class="col">
+            <h4 class="guide-list-item-title">
+              <a class="no-underline" href="{% url 'guides:detail' guide.id %}">{{ guide.title }}</a>
+            </h4>
+          </div>
+          <div class="col push-right">
+            <a href="{% url 'guides:edit' guide.id %}" style="color:deepskyblue;text-decoration:none;">&#128394;</a>
+            <a href="{% url 'guides:delete' guide.id %}" class="h3" style="color:red;text-decoration:none;">&times;</a>
+          </div>
+        </div>
         <p class="guide-list-item-subtitle muted"> written by {{ guide.author.username }} on {{ guide.pub_datetime|date }}</p>
         <p>{{ guide.overview }}</p>
       </li>

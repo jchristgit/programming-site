@@ -1,13 +1,12 @@
 import os
-from operator import attrgetter
 
 import requests
-from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponseRedirect
 from django.shortcuts import reverse
-from django.utils.decorators import method_decorator
+from django.urls import reverse_lazy
 from django.views import generic
 
+from .mixins import AuthorRequiredMixin, MemberRequiredMixin
 from .models import Guide
 from stats.models import Users as DiscordUser
 
@@ -21,8 +20,12 @@ class IndexView(generic.ListView):
         return Guide.objects.order_by('-pub_datetime')
 
 
-@method_decorator(user_passes_test(attrgetter('is_member')), name='dispatch')
-class CreateView(generic.CreateView):
+class DetailView(generic.DetailView):
+    model = Guide
+    template_name = 'guides/detail.html'
+
+
+class CreateView(generic.CreateView, MemberRequiredMixin):
     model = Guide
     fields = ['title', 'overview', 'content']
 
@@ -51,6 +54,12 @@ class CreateView(generic.CreateView):
         return HttpResponseRedirect(detail_url)
 
 
-class DetailView(generic.DetailView):
+class EditView(generic.UpdateView, MemberRequiredMixin, AuthorRequiredMixin):
     model = Guide
-    template_name = 'guides/detail.html'
+    fields = ['title', 'overview', 'content']
+
+
+class DeleteView(generic.DeleteView, MemberRequiredMixin, AuthorRequiredMixin):
+    model = Guide
+    success_url = reverse_lazy('guides:index')
+

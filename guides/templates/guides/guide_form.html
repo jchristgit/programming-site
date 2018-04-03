@@ -2,9 +2,14 @@
 
 {% block body %}
   <br>
+  {% if not form.initial %}
+    <h1>Create a Guide</h1>
+  {% else %}
+    <h1>Edit a Guide</h1>
+  {% endif %}
   <form action="{% url 'guides:create' %}" method="post">
     {% csrf_token %}
     {{ form }}
-    <input type="submit" value="Create" />
+    <input class="button" type="submit" value={% if not form.initial %}"Create"{% else %}"Update"{% endif %} />
   </form>
 {% endblock %}
