@@ -9,7 +9,6 @@ name = "pypi"
 Django = "==2.0.3"
 allauth = {git = "https://github.com/Volcyy/django-allauth"}
 requests = "==2.18.4"
-django-custom-anonymous = "==0.4"
 django-markupfield = "==1.4.3"
 Markdown = "==2.6.11"
 Pygments = "==2.2.0"

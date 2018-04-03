@@ -63,8 +63,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'custom_anonymous.middleware.AuthenticationMiddleware'
+    'django.middleware.clickjacking.XFrameOptionsMiddleware'
 ]
 
 ROOT_URLCONF = 'website.urls'
@@ -149,9 +148,6 @@ STATICFILES_DIRS = [
     PROJECT_DIR / 'static'
 ]
 SITE_ID = 1
-
-AUTH_ANONYMOUS_MODEL = 'home.users.CustomAnonymousUser'
-AUTH_USER_MODEL = 'home.User'
 
 # django-markupfield configuration for syntax highlighting
 markdown_extensions = (

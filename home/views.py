@@ -1,7 +1,7 @@
+from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.views import generic
 
-from .models import User
 from stats.models import (
     GuildMembership,
     Users as DiscordUser

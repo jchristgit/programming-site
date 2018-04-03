@@ -1,2 +1,2 @@
 # default to debug settings
-from .debug import *
+from .debug import *  # noqa
