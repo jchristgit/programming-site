@@ -1,0 +1,21 @@
+.guide-list {
+    list-style: none;
+}
+
+.guide-list-item-title {
+    margin-bottom: -0.2em;
+}
+
+.guide-list-item-subtitle {
+    padding-top: 0;
+    margin-bottom: 0.5em;
+}
+
+.no-underline {
+    text-decoration: none;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

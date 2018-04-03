@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
+{% load static %}
 
+{% block head %}
+  <link rel="stylesheet" type="text/css" href="{% static 'guides/guides.css' %}" />
+{% endblock %}
 {% block body %}
   <br>
   <div class="group">
@@ -12,10 +16,11 @@
   <h3>New Guides</h3>
   {% for guide in latest_guides %}
     {% if forloop.first %}
-      <ul>
+      <ul class="guide-list">
     {% endif %}
       <li>
-        <b><a href="{% url 'guides:detail' guide.id %}">{{ guide.title }}</a></b>
+        <h4 class="guide-list-item-title"><a class="no-underline" href="{% url 'guides:detail' guide.id %}">{{ guide.title }}</a></h4>
+        <p class="guide-list-item-subtitle muted"> written by {{ guide.author.username }} on {{ guide.pub_datetime|date }}</p>
         <p>{{ guide.overview }}</p>
       </li>
     {% if forloop.last %}
