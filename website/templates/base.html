@@ -21,7 +21,7 @@
       {% if user.is_authenticated %}
         {# If the user has their Discord account connected, show that #}
         {# TODO: Once we added user profiles, add a link to it here #}
-        <span class="black strong">{{ user.username }}</span>@programming$
+        <a class="black strong" href="{% url 'home:profile' user.id %}">{{ user.username }}</a>@programming$
       {% else %}
         {# If the user is not connected at all, provide a link to Discord OAuth #}
         <a class="black strong" href="{% provider_login_url 'discord' next='/' %}">$(YOUR_NAME)</a>@programming$

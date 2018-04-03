@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block body %}
+  <br>
+  {# <img src="{{ user.get_avatar_url }}"> #}
+  <h1>{{ user.username }}<span class="muted">#{{ user.discriminator }}</span></h1>
+  <p>
+    {{ user.username }} has been a registered user on this website since {{ user.date_joined|date }}.
+    On Discord, they are {% if user.is_staff %}part of staff{% elif user.is_member %}a member{% else %}a guest{% endif %}.
+  </p>
+{% endblock %}

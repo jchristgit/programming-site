@@ -2,3 +2,4 @@ __pycache__
 .idea
 Pipfile.lock
 *.sqlite3
+.env

@@ -9,23 +9,34 @@
     {% endif %}
   </div>
   <p class="large">Here we collect community-driven guides and tutorials for programming, our server, and more. Want to add something? Feel free to write your own!</p>
-  <div class="row gutters">
-    <div class="col col-12">
-      <h3>New Guides</h3>
-        {% for guide in latest_guides %}
-          {% if forloop.first %}
-            <ul>
-          {% endif %}
-            <li>
-              <b><a href="{% url 'guides:detail' guide.id %}">{{ guide.title }}</a></b>
-              <p>{{ guide.overview }}</p>
-            </li>
-          {% if forloop.last %}
-            </ul>
-          {% endif %}
-        {% empty %}
-          <i>Hmm... Seems like there's nothing here yet.</i>
-        {% endfor %}
-    </div>
-  </div>
+  <h3>New Guides</h3>
+  {% for guide in latest_guides %}
+    {% if forloop.first %}
+      <ul>
+    {% endif %}
+      <li>
+        <b><a href="{% url 'guides:detail' guide.id %}">{{ guide.title }}</a></b>
+        <p>{{ guide.overview }}</p>
+      </li>
+    {% if forloop.last %}
+      </ul>
+    {% endif %}
+  {% empty %}
+    <i>Hmm... Seems like there's nothing here yet.</i>
+  {% endfor %}
+  {% if is_paginated %}
+    <nav class="pagination align-center">
+      <ul>
+        {% if page_obj.has_previous %}
+          <li><a href="?page={{ page_obj.previous_page_number }}"><</a></li>
+        {% endif %}
+        <li>
+          <a href="#">Page <strong>{{ page_obj.number }}</strong> of <strong>{{ page_obj.paginator.num_pages }}</strong></a>
+        </li>
+        {% if page_obj.has_next %}
+          <li><a href="?page={{ page_obj.next_page_number }}">></a></li>
+        {% endif %}
+      </ul>
+    </nav>
+  {% endif %}
 {% endblock %}

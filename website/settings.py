@@ -38,8 +38,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'guides.apps.GuidesConfig',
     'home.apps.HomeConfig',
+    'guides.apps.GuidesConfig',
+    'stats.apps.StatsConfig',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -106,6 +107,13 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    },
+    'stats': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('PGSQL_DBNAME'),
+        'HOST': os.getenv('PGSQL_HOST'),
+        'USER': os.getenv('PGSQL_USER'),
+        'PASSWORD': os.getenv('PGSQL_PASSWORD')
     }
 }
 
