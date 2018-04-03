@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.conf import settings
 from django.shortcuts import render
 from django.views import generic
 
@@ -13,9 +14,8 @@ class IndexView(generic.View):
 
     def get(self, request):
         total_members = GuildMembership.objects.using('stats').filter(
-            guild_id=181866934353133570, is_member=True
+            guild_id=settings.DISCORD_GUILD_ID, is_member=True
         ).count()
-
         context = {
             'total_members': total_members
         }

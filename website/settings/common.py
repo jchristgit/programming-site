@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
-import os
 from pathlib import Path
 
 import bleach
@@ -19,6 +18,8 @@ from bleach_whitelist import markdown_attrs, markdown_tags
 from django.contrib.messages import constants as message_constants
 from markdown.extensions.codehilite import CodeHiliteExtension
 from markdown.extensions.fenced_code import FencedCodeExtension
+
+from .discord import *  # noqa
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = Path('.').resolve()
@@ -176,3 +177,7 @@ MESSAGE_TAGS = {
     message_constants.ERROR: 'error',
     message_constants.WARNING: 'warning',
 }
+
+
+# https://docs.djangoproject.com/en/2.0/ref/databases/#persistent-database-connections
+CONN_MAX_AGE = 60 * 30
