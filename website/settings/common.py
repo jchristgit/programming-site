@@ -104,7 +104,13 @@ DATABASES = {
         'HOST': os.getenv('PGSQL_HOST'),
         'USER': os.getenv('PGSQL_USER'),
         'PASSWORD': os.getenv('PGSQL_PASSWORD'),
-        'CONN_MAX_AGE': 60 * 30
+        'CONN_MAX_AGE': 60 * 30,
+        'OPTIONS': {
+            'sslmode': 'require'
+        },
+        'TEST': {
+            'NAME': os.getenv('PGSQL_TEST_DBNAME')
+        }
     }
 }
 
@@ -179,3 +185,5 @@ MESSAGE_TAGS = {
     message_constants.WARNING: 'warning',
 }
 
+TEST_RUNNER = 'website.runners.ManagedModelTestRunner'
+DATABASE_ROUTERS = ['website.routers.StatbotRouter']
