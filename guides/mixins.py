@@ -36,7 +36,7 @@ class AuthorRequiredMixin:
     """
 
     def dispatch(self, request, *args, **kwargs):
-        is_author = self.request.user == self.object.author
+        is_author = self.request.user == self.get_object().author
         is_admin = RoleMembership.objects.using('stats').filter(
             user_id=request.user.id,
             guild_id=settings.DISCORD_GUILD_ID,
@@ -68,7 +68,6 @@ class AddIsMemberContextMixin:
     """
 
     def get_context_data(self, **kwargs):
-        print("I'm getting called!")
         context = super().get_context_data(**kwargs)
         context['is_member'] = GuildMembership.objects.using('stats').filter(
             user_id=self.request.user.id,
