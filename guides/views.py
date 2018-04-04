@@ -1,5 +1,6 @@
 import requests
 from django.conf import settings
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import reverse
 from django.urls import reverse_lazy
@@ -33,8 +34,8 @@ class DetailView(generic.DetailView):
 
 
 class CreateView(MemberRequiredMixin, generic.CreateView):
-    model = Guide
     fields = ['title', 'overview', 'content']
+    model = Guide
 
     def form_valid(self, form):
         guide = form.save(commit=False)
@@ -60,10 +61,18 @@ class CreateView(MemberRequiredMixin, generic.CreateView):
 
 
 class EditView(MemberRequiredMixin, AuthorRequiredMixin, generic.UpdateView):
-    model = Guide
     fields = ['title', 'overview', 'content']
-
-
-class DeleteView(MemberRequiredMixin, AuthorRequiredMixin, generic.UpdateView):
     model = Guide
+
+    def get_success_url(self):
+        return reverse('guides:detail', kwargs={'pk': self.object.id})
+
+
+class DeleteView(MemberRequiredMixin, AuthorRequiredMixin, generic.DeleteView):
+    model = Guide
+    success_message = 'The guide "{}" was deleted successfully.'
     success_url = reverse_lazy('guides:index')
+
+    def delete(self, *args, **kwargs):
+        messages.success(self.request, self.success_message.format(self.get_object().title))
+        return super().delete(*args, **kwargs)
