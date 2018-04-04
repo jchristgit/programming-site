@@ -103,7 +103,8 @@ DATABASES = {
         'NAME': os.getenv('PGSQL_DBNAME'),
         'HOST': os.getenv('PGSQL_HOST'),
         'USER': os.getenv('PGSQL_USER'),
-        'PASSWORD': os.getenv('PGSQL_PASSWORD')
+        'PASSWORD': os.getenv('PGSQL_PASSWORD'),
+        'CONN_MAX_AGE': 60 * 30
     }
 }
 
@@ -178,6 +179,3 @@ MESSAGE_TAGS = {
     message_constants.WARNING: 'warning',
 }
 
-
-# https://docs.djangoproject.com/en/2.0/ref/databases/#persistent-database-connections
-CONN_MAX_AGE = 60 * 30
