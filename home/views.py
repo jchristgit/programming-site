@@ -3,9 +3,11 @@ from django.conf import settings
 from django.shortcuts import render
 from django.views import generic
 
-from stats.models import (
-    GuildMembership,
-    Users as DiscordUser
+from stats.models import GuildMembership
+from website.mixins import (
+    AddIsAdminContextMixin,
+    AddIsMemberContextMixin,
+    AddRequestDiscordUserMixin
 )
 
 
@@ -22,11 +24,7 @@ class IndexView(generic.View):
         return render(request, self.template_name, context)
 
 
-class ProfileView(generic.DetailView):
+class ProfileView(AddIsAdminContextMixin, AddIsMemberContextMixin,
+                  AddRequestDiscordUserMixin, generic.DetailView):
     model = User
     template_name = 'home/profile.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['discord_user'] = DiscordUser.from_django_user(context['user'])
-        return context
