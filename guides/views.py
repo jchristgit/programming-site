@@ -6,14 +6,14 @@ from django.shortcuts import reverse
 from django.urls import reverse_lazy
 from django.views import generic
 
-from .mixins import (
+from .models import Guide
+from stats.models import Users as DiscordUser
+from website.mixins import (
     AddIsMemberContextMixin,
     AddIsAdminContextMixin,
     AuthorRequiredMixin,
     MemberRequiredMixin
 )
-from .models import Guide
-from stats.models import Users as DiscordUser
 
 
 class IndexView(AddIsMemberContextMixin, AddIsAdminContextMixin, generic.ListView):
