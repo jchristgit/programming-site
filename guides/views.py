@@ -43,9 +43,8 @@ class CreateView(MemberRequiredMixin, generic.CreateView):
         guide.save()
 
         detail_url = self.request.build_absolute_uri(reverse('guides:detail', kwargs={'pk': guide.id}))
-        webhook_url = settings.DISCORD_WEBHOOK_URL
-        if webhook_url is not None:
-            requests.post(webhook_url, json={
+        if settings.DISCORD_WEBHOOK_URL is not None:
+            requests.post(settings.DISCORD_WEBHOOK_URL, json={
                 'embeds': [{
                     'title': f'New Guide posted: "{guide.title}"',
                     'author': {
@@ -67,6 +66,22 @@ class EditView(MemberRequiredMixin, AuthorRequiredMixin, generic.UpdateView):
     def get_success_url(self):
         return reverse('guides:detail', kwargs={'pk': self.object.id})
 
+    def form_valid(self, form):
+        detail_url = self.request.build_absolute_uri(reverse('guides:detail', kwargs={'pk': self.object.id}))
+        if settings.DISCORD_WEBHOOK_URL is not None:
+            requests.post(settings.DISCORD_WEBHOOK_URL, json={
+                'embeds': [{
+                    'title': f'{self.object.author}\'s guide "{self.object.title}" was just updated!',
+                    'author': {
+                        'name': self.request.user.username,
+                        'icon_url': DiscordUser.from_django_user(self.request.user).avatar_url
+                    },
+                    'url': detail_url,
+                    'color': 0x0099FF
+                }]
+            })
+        return HttpResponseRedirect(detail_url)
+
 
 class DeleteView(MemberRequiredMixin, AuthorRequiredMixin, generic.DeleteView):
     model = Guide
@@ -76,3 +91,19 @@ class DeleteView(MemberRequiredMixin, AuthorRequiredMixin, generic.DeleteView):
     def delete(self, *args, **kwargs):
         messages.success(self.request, self.success_message.format(self.get_object().title))
         return super().delete(*args, **kwargs)
+
+    def form_valid(self, form):
+        author_profile = self.request.build_absolute_uri(reverse('home:profile', kwargs={'pk': self.object.author.id}))
+        if settings.DISCORD_WEBHOOK_URL is not None:
+            requests.post(settings.DISCORD_WEBHOOK_URL, json={
+                'embeds': [{
+                    'title': f'{self.object.author}\'s guide "{self.object.title}" was deleted.',
+                    'author': {
+                        'name': self.request.user.username,
+                        'icon_url': DiscordUser.from_django_user(self.request.user).avatar_url
+                    },
+                    'url': author_profile,
+                    'color': 0xFF3300
+                }]
+            })
+        return HttpResponseRedirect(author_profile)
