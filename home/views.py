@@ -1,6 +1,5 @@
 from django.contrib.auth.models import User
 from django.conf import settings
-from django.shortcuts import render
 from django.views import generic
 
 from stats.models import GuildMembership
@@ -11,20 +10,17 @@ from website.mixins import (
 )
 
 
-class IndexView(generic.View):
+class IndexView(generic.TemplateView):
     template_name = 'home/index.html'
 
-    def get(self, request):
-        total_members = GuildMembership.objects.using('stats').filter(
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['total_members'] = GuildMembership.objects.using('stats').filter(
             guild_id=settings.DISCORD_GUILD_ID, is_member=True
         ).count()
-        context = {
-            'total_members': total_members
-        }
-        return render(request, self.template_name, context)
+        return context
 
 
 class ProfileView(AddIsAdminContextMixin, AddIsMemberContextMixin,
                   AddRequestDiscordUserMixin, generic.DetailView):
     model = User
-    template_name = 'home/profile.html'
