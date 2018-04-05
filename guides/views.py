@@ -59,7 +59,7 @@ class CreateView(MemberRequiredMixin, generic.CreateView):
         return HttpResponseRedirect(detail_url)
 
 
-class EditView(MemberRequiredMixin, AuthorRequiredMixin, generic.UpdateView):
+class EditView(AuthorRequiredMixin, generic.UpdateView):
     fields = ['title', 'overview', 'content']
     model = Guide
 
@@ -83,7 +83,7 @@ class EditView(MemberRequiredMixin, AuthorRequiredMixin, generic.UpdateView):
         return HttpResponseRedirect(detail_url)
 
 
-class DeleteView(MemberRequiredMixin, AuthorRequiredMixin, generic.DeleteView):
+class DeleteView(AuthorRequiredMixin, generic.DeleteView):
     model = Guide
     success_message = 'The guide "{}" was deleted successfully.'
     success_url = reverse_lazy('guides:index')
