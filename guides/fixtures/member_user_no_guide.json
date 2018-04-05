@@ -1,0 +1,44 @@
+[
+    {
+        "model": "auth.user",
+        "pk": 1,
+        "fields": {
+            "email": "email@author.com",
+            "username": "testauthorusername",
+            "password": "testpassword"
+        }
+    },
+    {
+        "model": "stats.guilds",
+        "pk": 42,
+        "fields": {
+            "owner": 1,
+            "name": "Test Guild",
+            "icon": "",
+            "voice_region": 1,
+            "afk_timeout": 5,
+            "mfa": false,
+            "verification_level": 1,
+            "explicit_content_filter": 1,
+            "features": []
+        }
+    },
+    {
+        "model": "stats.guildmembership",
+        "pk": 1,
+        "fields": {
+            "guild_id": 42,
+            "is_member": true
+        }
+    },
+    {
+        "model": "stats.users",
+        "pk": 1,
+        "fields": {
+            "name": "test discord user",
+            "discriminator": 1337,
+            "is_deleted": false,
+            "is_bot": false
+        }
+    }
+]

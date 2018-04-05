@@ -1,0 +1,25 @@
+[
+    {
+        "model": "auth.user",
+        "pk": 1,
+        "fields": {
+            "email": "email@author.com",
+            "username": "testauthorusername",
+            "password": "testpassword"
+        }
+    },
+    {
+        "model": "guides.guide",
+        "pk": 1,
+        "fields": {
+            "title": "Test Guide",
+            "overview": "test guide overview",
+            "content": "test guide content",
+            "author": 1,
+            "content_markup_type": "markdown",
+            "pub_datetime": "2018-04-05T20:57:15.221Z",
+            "_content_rendered": "<p>test guide content</p>",
+            "edit_datetime": "2018-04-05T20:57:15.222Z"
+        }
+    }
+]
