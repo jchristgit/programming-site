@@ -43,7 +43,7 @@ class CreateView(MemberRequiredMixin, generic.CreateView):
         guide.save()
 
         detail_url = self.request.build_absolute_uri(reverse('guides:detail', kwargs={'pk': guide.id}))
-        if settings.DISCORD_WEBHOOK_URL is not None:
+        if settings.DISCORD_WEBHOOK_URL is not None and not settings.IS_TESTING:
             requests.post(settings.DISCORD_WEBHOOK_URL, json={
                 'embeds': [{
                     'title': f'New Guide posted: "{guide.title}"',
@@ -68,7 +68,7 @@ class EditView(AuthorRequiredMixin, generic.UpdateView):
 
     def form_valid(self, form):
         detail_url = self.request.build_absolute_uri(reverse('guides:detail', kwargs={'pk': self.object.id}))
-        if settings.DISCORD_WEBHOOK_URL is not None:
+        if settings.DISCORD_WEBHOOK_URL is not None and not settings.IS_TESTING:
             requests.post(settings.DISCORD_WEBHOOK_URL, json={
                 'embeds': [{
                     'title': f'{self.object.author}\'s guide "{self.object.title}" was just updated!',
@@ -94,7 +94,7 @@ class DeleteView(AuthorRequiredMixin, generic.DeleteView):
 
     def form_valid(self, form):
         author_profile = self.request.build_absolute_uri(reverse('home:profile', kwargs={'pk': self.object.author.id}))
-        if settings.DISCORD_WEBHOOK_URL is not None:
+        if settings.DISCORD_WEBHOOK_URL is not None and not settings.IS_TESTING:
             requests.post(settings.DISCORD_WEBHOOK_URL, json={
                 'embeds': [{
                     'title': f'{self.object.author}\'s guide "{self.object.title}" was deleted.',
