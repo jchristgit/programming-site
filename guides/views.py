@@ -67,6 +67,7 @@ class EditView(AuthorRequiredMixin, generic.UpdateView):
         return reverse('guides:detail', kwargs={'pk': self.object.id})
 
     def form_valid(self, form):
+        super().form_valid(form)
         detail_url = self.request.build_absolute_uri(reverse('guides:detail', kwargs={'pk': self.object.id}))
         if settings.DISCORD_WEBHOOK_URL is not None and not settings.IS_TESTING:
             requests.post(settings.DISCORD_WEBHOOK_URL, json={
