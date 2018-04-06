@@ -10,7 +10,12 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
+  <meta property="og:title" content="{% block og-title %}Programming Discord Server{% endblock %}">
+  <meta property="og:type" content="{% block og-type %}website{% endblock %}">
+  <meta property="og:image" content="{% static 'assets/logo.png' %}">
+  <meta property="og:url" content="{{ request.get_full_path }}">
+  <meta property="og:site_name" content="The Programming Discord Server">
+  <meta property="og:description" content="{% block og-description %}Your programming journey starts here."{% endblock %}>
   {% block head %}{% endblock %}
 </head>
 
@@ -46,5 +51,8 @@
   {% endfor %}
 {% endif %}
 {% block body %}{% endblock %}
+{% if messages %}
+  <script src="{% static 'js/kube.min.js' %}"></script>
+{% endif %}
 </body>
 </html>

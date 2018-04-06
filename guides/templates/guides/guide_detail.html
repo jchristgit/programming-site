@@ -1,9 +1,16 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block og-title %}Guide: {{ guide.title }}{% endblock %}
+{% block og-type %}article{% endblock %}
 {% block head %}
   <link rel="stylesheet" type="text/css" href="{% static 'guides/css/codehilite.min.css' %}" />
   <link rel="stylesheet" type="text/css" href="{% static 'guides/css/detail.css' %}" />
+  <meta property="article:published_time" content="{{ guide.pub_datetime }}">
+  <meta property="article:modified_time" content="{{ guide.edit_datetime }}">
+  <meta property="article:author:username" content="{{ guide.author.first_name }}">
+  <meta property="article:section" content="Programming">
+  {# <meta property="article:tag" content=... #}
 {% endblock %}
 
 {% block body %}

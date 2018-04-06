@@ -1,5 +1,16 @@
 {% extends 'base.html' %}
 
+{% block title %}{{ user.first_name }}'s profile{% endblock %}
+{% block og-title %}Programming Discord Server: {{ user.first_name }}'s profile{% endblock %}
+{% block og-type %}profile{% endblock %}
+{% block og-description %}
+  {{ user.first_name }} has been a registered user on this website since {{ user.date_joined|date }}.
+  Visit their profile to learn more about them.
+{% endblock %}
+{% block head %}
+  <meta property="og:profile:username" content="{{ user.first_name }}">
+{% endblock %}
+
 {% block body %}
   <br>
   {# <img src="{{ user.get_avatar_url }}"> #}
