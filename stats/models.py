@@ -23,7 +23,7 @@ class AuditLog(models.Model):
 
 
 class AuditLogChanges(models.Model):
-    audit_entry = models.ForeignKey(AuditLog, models.DO_NOTHING, primary_key=True)
+    audit_entry = models.OneToOneField(AuditLog, models.DO_NOTHING, primary_key=True)
     guild_id = models.BigIntegerField()
     state = models.TextField()  # This field type is a guess.
     attributes = models.TextField()  # This field type is a guess.
