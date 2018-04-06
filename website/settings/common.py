@@ -47,7 +47,9 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.discord'
+    'allauth.socialaccount.providers.discord',
+
+    'widget_tweaks'
 ]
 
 AUTHENTICATION_BACKENDS = (
@@ -189,4 +191,3 @@ MESSAGE_TAGS = {
 
 # TEST_RUNNER = 'website.runners.ManagedModelTestRunner'
 DATABASE_ROUTERS = ['website.routers.StatbotRouter']
-

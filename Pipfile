@@ -16,6 +16,7 @@ Pygments = "==2.2.0"
 bleach = "==2.1.3"
 bleach-whitelist = {git = "https://github.com/Volcyy/bleach-whitelist"}
 "psycopg2-binary" = "==2.7.4"
+django-widget-tweaks = "==1.4.2"
 
 [requires]
 python_version = "3.6"

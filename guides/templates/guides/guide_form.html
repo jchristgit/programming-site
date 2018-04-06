@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
 
 {% block body %}
   <br>
@@ -7,9 +8,20 @@
   {% else %}
     <h1>Create a Guide</h1>
   {% endif %}
-  <form action="{% if object %}{% url 'guides:edit' object.id %}{% else %}{% url 'guides:create' %}{% endif %}" method="post">
+  <form class="form" action="{% if object %}{% url 'guides:edit' object.id %}{% else %}{% url 'guides:create' %}{% endif %}" method="post">
     {% csrf_token %}
-    {{ form }}
+    <div class="form-item">
+      <label for="id_title">Title<span class="desc">{{ form.title.help_text }}</span></label>
+      {% render_field form.title class+="big" %}
+    </div>
+    <div class="form-item">
+      <label for="id_overview">Overview<span class="desc">{{ form.overview.help_text }}</span></label>
+      {% render_field form.overview rows=3 %}
+    </div>
+    <div class="form-item">
+      <label for="id_content">Content<span class="desc">{{ form.content.help_text }}</span></label>
+      {% render_field form.content %}
+    </div>
     <input class="button" type="submit" value="{% if object %}Update{% else %}Create{% endif %}" />
   </form>
 {% endblock %}
