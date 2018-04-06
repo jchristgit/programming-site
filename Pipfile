@@ -4,6 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [dev-packages]
+gunicorn = "==19.7.1"
 
 [packages]
 Django = "==2.0.3"
