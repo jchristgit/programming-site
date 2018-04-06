@@ -87,7 +87,8 @@ class AnonymousUserSingleGuideTests(TransactionTestCase):
     def test_anonymous_user_create_guide_status_403(self):
         """
         Anonymous Users should get 403 Forbidden
-        when attempting to create a Guide.
+        when attempting to access the form used
+        to create a guide.
         """
 
         resp = self.client.get(reverse('guides:create'))
@@ -96,7 +97,8 @@ class AnonymousUserSingleGuideTests(TransactionTestCase):
     def test_anonymous_user_edit_guide_status_403(self):
         """
         Anonymous Users should get 403 Forbidden
-        when attempting to edit a Guide.
+        when attempting to access the form used
+        to edit a guide.
         """
 
         resp = self.client.get(reverse('guides:edit', kwargs={'pk': self.guide.id}))
@@ -105,7 +107,8 @@ class AnonymousUserSingleGuideTests(TransactionTestCase):
     def test_anonymous_user_delete_guide_status_403(self):
         """
         Anonymous Users should get 403 Forbidden
-        when attempting to delete a Guide.
+        when attempting to access the form
+        used to delete a guide.
         """
 
         resp = self.client.get(reverse('guides:delete', kwargs={'pk': self.guide.id}))
@@ -162,7 +165,8 @@ class GuestUserSingleGuideTests(TransactionTestCase):
     def test_guest_user_create_guide_status_403(self):
         """
         Guest Users should get 403 Forbidden
-        when attempting to create a Guide.
+        when attempting to access the form
+        used to create a new guide.
         """
 
         resp = self.client.get(reverse('guides:create'))
@@ -171,7 +175,8 @@ class GuestUserSingleGuideTests(TransactionTestCase):
     def test_guest_user_edit_guide_status_403(self):
         """
         Guest Users should get 403 Forbidden
-        when attempting to edit a Guide.
+        when attempting to access the form
+        used to edit a Guide.
         """
 
         resp = self.client.get(reverse('guides:edit', kwargs={'pk': self.guide.id}))
@@ -180,7 +185,8 @@ class GuestUserSingleGuideTests(TransactionTestCase):
     def test_guest_user_delete_guide_status_403(self):
         """
         Guest Users should get 403 Forbidden
-        when attempting to delete a Guide.
+        when attempting to access the form
+        used to delete a Guide.
         """
 
         resp = self.client.get(reverse('guides:delete', kwargs={'pk': self.guide.id}))
@@ -239,11 +245,8 @@ class MemberUserSingleGuideTests(TransactionTestCase):
     def test_member_user_create_guide_status_200(self):
         """
         Members should be allowed to create a Guide,
-        thus `guides:create` should respond with 200 OK.
-        The `DISCORD_GUILD_ID` setting needs to be
-        overridden since the `MemberRequiredMixin`
-        used by `guides:create` uses this value to
-        determine whether the request was made by a member.
+        thus the edit form for creating a guide
+        on `guides:create` should respond with 200 OK.
         """
 
         resp = self.client.get(reverse('guides:create'))
@@ -253,12 +256,8 @@ class MemberUserSingleGuideTests(TransactionTestCase):
     def test_member_user_edit_guide_status_403(self):
         """
         Members should get 403 Forbidden when
-        attempting to edit guides they did not create.
-        The `DISCORD_GUILD_ID` setting needs to be
-        overridden since the `AuthorRequiredMixin`
-        used by `guides:edit` uses this value to
-        determine whether the request was made by
-        a staff member, which is not the case here.
+        attempting to access the edit form to
+        guides that they did not create.
         """
 
         resp = self.client.get(reverse('guides:edit', kwargs={'pk': self.guide.id}))
@@ -268,12 +267,8 @@ class MemberUserSingleGuideTests(TransactionTestCase):
     def test_member_user_delete_guide_status_403(self):
         """
         Members should get 403 Forbidden when
-        attempting to delete guides they did not create.
-        The `DISCORD_GUILD_ID` setting needs to be
-        overridden since the `AuthorRequiredMixin`
-        used by `guides:delete` uses this value to
-        determine whether the request was made by
-        a staff member, which is not the case here.
+        attempting to get the confirmation form
+        to delete guides they did not create.
         """
 
         resp = self.client.get(reverse('guides:delete', kwargs={'pk': self.guide.id}))
@@ -348,11 +343,6 @@ class AuthorUserSingleGuideTests(TransactionTestCase):
         """
         The author should get 200 OK when attempting
         to GET `guides:edit` the guide that they created.
-        The `DISCORD_GUILD_ID` setting needs to be
-        overridden since the `AuthorRequiredMixin`
-        used by `guides:edit` uses this value to
-        determine whether the request was made by
-        a staff member, which is not the case here.
         """
 
         resp = self.client.get(reverse('guides:edit', kwargs={'pk': self.guide.id}))
@@ -363,11 +353,6 @@ class AuthorUserSingleGuideTests(TransactionTestCase):
         """
         The author should get 200 OK when attempting
         to GET `guides:delete` for a guide they created.
-        The `DISCORD_GUILD_ID` setting needs to be
-        overridden since the `AuthorRequiredMixin`
-        used by `guides:delete` uses this value to
-        determine whether the request was made by
-        a staff member, which is not the case here.
         """
 
         resp = self.client.get(reverse('guides:delete', kwargs={'pk': self.guide.id}))
@@ -466,3 +451,77 @@ class MemberUserGuideInteractionsTests(TransactionTestCase):
 
         guide_detail_get = self.client.get(reverse('guides:detail', kwargs={'pk': guide.id}))
         self.assertEqual(guide_detail_get.status_code, 404)
+
+
+class AdminUserUnownedGuideInteractionsTests(TransactionTestCase):
+    """
+    Scenario:
+        - 1 existing Guide
+        - (Discord) administrator accesses the site
+        - (Discord) administrator uses guide creation, edit, and delete views
+          for guides not owned by them
+    """
+
+    fixtures = ['admin_user_unowned_guide']
+    multi_db = True
+
+    def setUp(self):
+        user = User.objects.filter(username="admintestuser").first()
+        self.client.force_login(user)
+
+    @override_settings(
+        DISCORD_GUILD_ID=42,
+        DISCORD_ADMIN_ROLE_ID=10
+    )
+    def test_staff_can_edit_unowned_guide(self):
+        """
+        A staff member should be able to edit
+        a guide that they do not own, and
+        editing the guide should redirect them
+        towards the detail page for it.
+        """
+
+        guide = Guide.objects.first()
+        edit_data = {
+            'title': 'edited title',
+            'overview': 'edited overview',
+            'content': 'edited content'
+        }
+        guide_edit_post = self.client.post(reverse('guides:edit', kwargs={'pk': guide.id}), data=edit_data)
+        guide.refresh_from_db()
+
+        guide_edit_get = self.client.get(reverse('guides:edit', kwargs={'pk': guide.id}))
+        self.assertEqual(guide_edit_get.status_code, 200)
+
+        self.assertEqual(guide_edit_post.status_code, 302)
+        self.assertEqual(guide.title, edit_data['title'])
+        self.assertEqual(guide.overview, edit_data['overview'])
+        self.assertEqual(guide.content.raw, edit_data['content'])
+        self.assertTrue(guide_edit_post.url.endswith(reverse('guides:detail', kwargs={'pk': guide.id})))
+
+        guide_detail = self.client.get(reverse('guides:detail', kwargs={'pk': guide.id}))
+        self.assertEqual(guide_detail.context['guide'], guide)
+
+    @override_settings(
+        DISCORD_GUILD_ID=42,
+        DISCORD_ADMIN_ROLE_ID=10
+    )
+    def test_staff_can_delete_unowned_guide(self):
+        """
+        A staff member should be able to delete
+        a guide that they do not own, and
+        deleting the guide should redirect them
+        towards `guides:index`.
+        """
+
+        guide = Guide.objects.first()
+        guide_delete_get = self.client.get(reverse('guides:delete', kwargs={'pk': guide.id}))
+        self.assertEqual(guide_delete_get.status_code, 200)
+
+        guide_delete_delete = self.client.delete(reverse('guides:delete', kwargs={'pk': guide.id}))
+        self.assertEqual(guide_delete_delete.status_code, 302)
+        self.assertIsNone(Guide.objects.first())
+        self.assertTrue(guide_delete_delete.url.endswith(reverse('guides:index')))
+
+        guide_index = self.client.get(reverse('guides:index'))
+        self.assertSequenceEqual(guide_index.context[INDEX_GUIDE_CONTEXT_NAME], [])

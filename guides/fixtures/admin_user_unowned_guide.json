@@ -1,0 +1,109 @@
+[
+    {
+        "model": "auth.user",
+        "pk": 20,
+        "fields": {
+            "password": "testpassword",
+            "last_login": "2018-04-05T20:57:19.051Z",
+            "is_superuser": false,
+            "username": "guesttestusername",
+            "first_name": "",
+            "last_name": "",
+            "email": "email@guest.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2018-04-05T20:57:15.219Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "auth.user",
+        "pk": 5,
+        "fields": {
+            "username": "admintestuser",
+            "password": "testpassword",
+            "email": "admin@staff.com"
+        }
+    },
+    {
+        "model": "guides.guide",
+        "pk": 1,
+        "fields": {
+            "title": "Test Guide",
+            "overview": "test guide overview",
+            "content": "test guide content",
+            "content_markup_type": "markdown",
+            "pub_datetime": "2018-04-05T20:57:15.221Z",
+            "_content_rendered": "<p>test guide content</p>",
+            "edit_datetime": "2018-04-05T20:57:15.222Z",
+            "author": 20
+        }
+    },
+    {
+        "model": "stats.guilds",
+        "pk": 42,
+        "fields": {
+            "owner": 20,
+            "name": "Test Guild",
+            "icon": "",
+            "voice_region": 1,
+            "afk_timeout": 5,
+            "mfa": false,
+            "verification_level": 1,
+            "explicit_content_filter": 1,
+            "features": []
+        }
+    },
+    {
+        "model": "stats.guildmembership",
+        "pk": 20,
+        "fields": {
+            "guild_id": 42,
+            "is_member": true
+        }
+    },
+    {
+        "model": "stats.rolemembership",
+        "fields": {
+            "role": 10,
+            "guild_id": 42,
+            "user": 5
+        }
+    },
+    {
+        "model": "stats.roles",
+        "pk": 10,
+        "fields": {
+            "name": "staff",
+            "color": 0,
+            "raw_permissions": 0,
+            "guild_id": 42,
+            "is_hoisted": true,
+            "is_managed": true,
+            "is_mentionable": true,
+            "is_deleted": false,
+            "position": 1
+        }
+    },
+    {
+        "model": "stats.users",
+        "pk": 20,
+        "fields": {
+            "name": "test discord user",
+            "discriminator": 1337,
+            "is_deleted": false,
+            "is_bot": false
+        }
+    },
+    {
+        "model": "stats.users",
+        "pk": 5,
+        "fields": {
+            "name": "test discord user",
+            "discriminator": 1337,
+            "is_deleted": false,
+            "is_bot": false
+        }
+    }
+]
