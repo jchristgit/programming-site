@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block og-title %}Programming Discord Server: Guids{% endblock %}
-{% block og-description %}{% endblock %}
+{% block og-title %}Programming Discord Server: Guides{% endblock %}
+{% block og-description %}Read our member's guides on various topics about programming.{% endblock %}
 {% block head %}
   <link rel="stylesheet" type="text/css" href="{% static 'guides/css/style.css' %}" />
 {% endblock %}
@@ -34,7 +34,7 @@
             </div>
           {% endif %}
         </div>
-        <p class="guide-list-item-subtitle muted"> written by {{ guide.author.username }} on {{ guide.pub_datetime|date }}</p>
+        <p class="guide-list-item-subtitle muted"> written by {{ guide.author.first_name }} on {{ guide.pub_datetime|date }}</p>
         <p>{{ guide.overview }}</p>
       </li>
     {% if forloop.last %}

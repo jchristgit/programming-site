@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block og-title %}Guide: {{ guide.title }}{% endblock %}
+{% block og-description %}{{ guide.overview }}{% endblock %}
 {% block og-type %}article{% endblock %}
 {% block head %}
   <link rel="stylesheet" type="text/css" href="{% static 'guides/css/codehilite.min.css' %}" />
