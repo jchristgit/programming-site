@@ -162,7 +162,7 @@ STATICFILES_DIRS = [
 SITE_ID = 1
 
 # django-markupfield configuration for syntax highlighting
-markdown_extensions = (
+MARKDOWN_EXTENSIONS = (
     CodeHiliteExtension(),
     FencedCodeExtension()
 )
@@ -170,7 +170,7 @@ markdown_extensions = (
 
 def _markdown(text):
     return bleach.clean(
-        markdown.markdown(text, extensions=markdown_extensions),
+        markdown.markdown(text, extensions=MARKDOWN_EXTENSIONS),
         markdown_tags, markdown_attrs
     )
 
