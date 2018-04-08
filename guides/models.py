@@ -19,7 +19,10 @@ class Guide(models.Model):
     )
     pub_datetime = models.DateTimeField(auto_now_add=True, editable=False)
     edit_datetime = models.DateTimeField(auto_now=True, editable=False)
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        ordering = ['-pub_datetime']

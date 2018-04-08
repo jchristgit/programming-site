@@ -18,10 +18,8 @@ from website.mixins import (
 
 class IndexView(AddIsMemberContextMixin, AddIsAdminContextMixin, generic.ListView):
     context_object_name = 'latest_guides'
+    model = Guide
     paginate_by = 10
-
-    def get_queryset(self):
-        return Guide.objects.order_by('-pub_datetime')
 
 
 class DetailView(generic.DetailView):
