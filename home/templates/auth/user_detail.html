@@ -19,7 +19,6 @@
   <h1>{{ user.first_name }}<span class="muted">#{{ user.last_name }}</span></h1>
   <p>
     {{ user.first_name }} has been a registered user on this website since {{ user.date_joined|date }}.
-    On Discord, they are {% if is_admin %}part of staff{% elif is_member %}a member{% else %}a guest{% endif %}.
   </p>
   {% for guide in user.guide_set.all %}
     {% if forloop.first %}

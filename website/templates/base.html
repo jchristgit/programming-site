@@ -23,9 +23,9 @@
 <nav class="row">
   <div class="col col-2">
     <code class="monospace label text-left">
-      {% if user.is_authenticated %}
+      {% if request.user.is_authenticated %}
         {# If the user has their Discord account connected, show that #}
-        <a class="black strong" href="{% url 'home:profile' user.id %}">{{ user.first_name }}</a>@programming$
+        <a class="black strong" href="{% url 'home:profile' user.id %}">{{ request.user.first_name }}</a>@programming$
       {% else %}
         {# If the user is not logged in, provide a link to Discord OAuth #}
         <a class="black strong" href="{% provider_login_url 'discord' next='/' %}">$(YOUR_NAME)</a>@programming$

@@ -2,12 +2,7 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.views import generic
 
-from stats.models import GuildMembership, Messages
-from website.mixins import (
-    AddIsAdminContextMixin,
-    AddIsMemberContextMixin,
-    AddRequestDiscordUserMixin
-)
+from stats.models import GuildMembership
 
 
 class IndexView(generic.TemplateView):
@@ -21,6 +16,5 @@ class IndexView(generic.TemplateView):
         return context
 
 
-class ProfileView(AddIsAdminContextMixin, AddIsMemberContextMixin,
-                  AddRequestDiscordUserMixin, generic.DetailView):
+class ProfileView(generic.DetailView):
     model = User
