@@ -34,7 +34,11 @@
             </div>
           {% endif %}
         </div>
-        <p class="guide-list-item-subtitle muted"> written by {{ guide.author.first_name }} on {{ guide.pub_datetime|date }}</p>
+        <p class="guide-list-item-subtitle muted">
+          written by <a class="strong no-underline" href="{% url 'home:profile' guide.author.id %}">
+            @{{ guide.author.first_name }}
+          </a> on {{ guide.pub_datetime|date }}
+        </p>
         <p>{{ guide.overview }}</p>
       </li>
     {% if forloop.last %}
