@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}{{ user.first_name }}'s profile{% endblock %}
 {% block og-title %}Programming Discord Server: {{ user.first_name }}'s profile{% endblock %}
@@ -9,6 +10,7 @@
 {% endblock %}
 {% block head %}
   <meta property="og:profile:username" content="{{ user.first_name }}">
+  <link rel="stylesheet" type="text/css" href="{% static 'home/css/user_detail.css' %}">
 {% endblock %}
 
 {% block body %}
@@ -19,4 +21,22 @@
     {{ user.first_name }} has been a registered user on this website since {{ user.date_joined|date }}.
     On Discord, they are {% if is_admin %}part of staff{% elif is_member %}a member{% else %}a guest{% endif %}.
   </p>
+  {% for guide in user.guide_set.all %}
+    {% if forloop.first %}
+      <hr>
+      <h3>Guides written by {{ user.first_name }}</h3>
+      <ul>
+    {% endif %}
+    <li>
+      <strong>
+        <a class="no-underline" href="{% url 'guides:detail' guide.id %}">
+          {{ guide.title }}
+        </a>
+      </strong>
+      <span class="muted"> published on {{ guide.pub_datetime|date }}</span>
+    </li>
+    {% if forloop.last %}
+      </ul>
+    {% endif %}
+  {% endfor %}
 {% endblock %}

@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.views import generic
 
-from stats.models import GuildMembership
+from stats.models import GuildMembership, Messages
 from website.mixins import (
     AddIsAdminContextMixin,
     AddIsMemberContextMixin,
