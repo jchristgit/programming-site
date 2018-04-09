@@ -12,13 +12,13 @@ class LatestGuidesRSSFeed(Feed):
     link = reverse_lazy('guides:feed_rss')
 
     def items(self):
-        return Guide.objects.all()[:5]
+        return Guide.objects.all()
 
     def item_title(self, item):
         return item.title
 
     def item_description(self, item):
-        return item.overview
+        return item.content
 
     def item_link(self, item):
         return reverse('guides:detail', kwargs={'pk': item.id})
