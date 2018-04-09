@@ -35,7 +35,7 @@
           {% endif %}
         </div>
         <p class="guide-list-item-subtitle muted">
-          written by <a class="strong no-underline" href="{% url 'home:profile' guide.author.id %}">
+          written by <a class="strong no-underline" href="{% url 'profiles:detail' guide.author.id %}">
             @{{ guide.author.first_name }}
           </a> on {{ guide.pub_datetime|date }}
         </p>

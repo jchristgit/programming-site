@@ -1,0 +1,67 @@
+[
+     {
+        "model": "auth.user",
+        "pk": 5,
+        "fields": {
+            "username": "admintestuser",
+            "password": "testpassword",
+            "email": "admin@staff.com"
+        }
+    },
+    {
+        "model": "stats.guilds",
+        "pk": 42,
+        "fields": {
+            "owner": 5,
+            "name": "Test Guild",
+            "icon": "",
+            "voice_region": 1,
+            "afk_timeout": 5,
+            "mfa": false,
+            "verification_level": 1,
+            "explicit_content_filter": 1,
+            "features": []
+        }
+    },
+    {
+        "model": "stats.guildmembership",
+        "pk": 5,
+        "fields": {
+            "guild_id": 42,
+            "is_member": true
+        }
+    },
+    {
+        "model": "stats.rolemembership",
+        "fields": {
+            "role": 10,
+            "guild_id": 42,
+            "user": 5
+        }
+    },
+    {
+        "model": "stats.roles",
+        "pk": 10,
+        "fields": {
+            "name": "staff",
+            "color": 0,
+            "raw_permissions": 0,
+            "guild_id": 42,
+            "is_hoisted": true,
+            "is_managed": true,
+            "is_mentionable": true,
+            "is_deleted": false,
+            "position": 1
+        }
+    },
+    {
+        "model": "stats.users",
+        "pk": 5,
+        "fields": {
+            "name": "admin test discord user",
+            "discriminator": 1337,
+            "is_deleted": false,
+            "is_bot": false
+        }
+    }
+]

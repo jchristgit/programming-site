@@ -9,16 +9,12 @@ class AnonymousUserHomeTests(TestCase):
     """
     Scenario:
         - Anonymous User
-        - accesses index and profile
+        - accesses index
     """
 
     def test_index_status_200(self):
         resp = self.client.get(reverse('home:index'))
         self.assertEqual(resp.status_code, 200)
-
-    def test_profile_status_404(self):
-        resp = self.client.get(reverse('home:profile', kwargs={'pk': 1}))
-        self.assertEqual(resp.status_code, 404)
 
     def test_index_context_member_count_is_zero(self):
         resp = self.client.get(reverse('home:index'))
@@ -29,7 +25,7 @@ class GuestUserHomeTests(TransactionTestCase):
     """
     Scenario:
         - Guest User
-        - accesses index and profile
+        - accesses index
     """
 
     fixtures = ['guest_user']
@@ -42,18 +38,9 @@ class GuestUserHomeTests(TransactionTestCase):
         resp = self.client.get(reverse('home:index'))
         self.assertEqual(resp.status_code, 200)
 
-    def test_profile_status_200(self):
-        resp = self.client.get(reverse('home:profile', kwargs={'pk': self.user.id}))
-        self.assertEqual(resp.status_code, 200)
-
     def test_index_context_member_count_is_zero(self):
         resp = self.client.get(reverse('home:index'))
         self.assertEqual(resp.context['total_members'], 0)
-
-    def test_profile_context(self):
-        resp = self.client.get(reverse('home:profile', kwargs={'pk': self.user.id}))
-
-        self.assertEqual(resp.context['user'], self.user)
 
 
 @override_settings(
@@ -63,7 +50,7 @@ class MemberUserHomeTests(TransactionTestCase):
     """
     Scenario:
         - Member User
-        - accesses index and profile
+        - accesses index
     """
 
     fixtures = ['member_user']
@@ -81,17 +68,9 @@ class MemberUserHomeTests(TransactionTestCase):
         resp = self.client.get(reverse('home:index'))
         self.assertEqual(resp.status_code, 200)
 
-    def test_profile_status_200(self):
-        resp = self.client.get(reverse('home:profile', kwargs={'pk': self.user.id}))
-        self.assertEqual(resp.status_code, 200)
-
     def test_index_context_member_count_is_one(self):
         resp = self.client.get(reverse('home:index'))
         self.assertEqual(resp.context['total_members'], 1)
-
-    def test_profile_context(self):
-        resp = self.client.get(reverse('home:profile', kwargs={'pk': self.user.id}))
-        self.assertEqual(resp.context['user'], self.user)
 
 
 @override_settings(
@@ -102,7 +81,7 @@ class AdminUserHomeTests(TransactionTestCase):
     """
     Scenario:
         - Admin User
-        - accesses index and profile
+        - accesses index
     """
 
     fixtures = ['admin_user']
@@ -118,14 +97,6 @@ class AdminUserHomeTests(TransactionTestCase):
         resp = self.client.get(reverse('home:index'))
         self.assertEqual(resp.status_code, 200)
 
-    def test_profile_status_200(self):
-        resp = self.client.get(reverse('home:profile', kwargs={'pk': self.user.id}))
-        self.assertEqual(resp.status_code, 200)
-
     def test_index_context_member_count_is_one(self):
         resp = self.client.get(reverse('home:index'))
         self.assertEqual(resp.context['total_members'], 1)
-
-    def test_profile_context(self):
-        resp = self.client.get(reverse('home:profile', kwargs={'pk': self.user.id}))
-        self.assertEqual(resp.context['user'], self.user)

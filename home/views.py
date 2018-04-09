@@ -1,4 +1,3 @@
-from django.contrib.auth.models import User
 from django.conf import settings
 from django.views import generic
 
@@ -14,7 +13,3 @@ class IndexView(generic.TemplateView):
             guild_id=settings.DISCORD_GUILD_ID, is_member=True
         ).count()
         return context
-
-
-class ProfileView(generic.DetailView):
-    model = User

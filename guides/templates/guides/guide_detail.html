@@ -20,7 +20,7 @@
   <div class="author-info">
     {# <img class="small author-image" src="{{ author_discord.avatar_url }}"> #}
     <cite class="h5">
-      written by<a class="strong no-underline" href="{% url 'home:profile' guide.author.id %}">
+      written by<a class="strong no-underline" href="{% url 'profiles:detail' guide.author.id %}">
         @{{ guide.author.first_name }}
       </a> on {{ guide.pub_datetime|date }}
     </cite>

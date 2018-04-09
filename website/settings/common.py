@@ -33,6 +33,7 @@ IS_TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 INSTALLED_APPS = [
     'home.apps.HomeConfig',
     'guides.apps.GuidesConfig',
+    'profiles.apps.ProfilesConfig',
     'stats.apps.StatsConfig',
 
     'django.contrib.admin',
