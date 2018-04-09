@@ -104,10 +104,10 @@ DATABASES = {
     },
     'stats': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('PGSQL_DBNAME'),
-        'HOST': os.getenv('PGSQL_HOST'),
-        'USER': os.getenv('PGSQL_USER'),
-        'PASSWORD': os.getenv('PGSQL_PASSWORD'),
+        'NAME': os.environ['PGSQL_DBNAME'],
+        'HOST': os.environ['PGSQL_HOST'] if not IS_TESTING else os.environ['PGSQL_TEST_HOST'],
+        'USER': os.environ['PGSQL_USER'] if not IS_TESTING else os.environ['PGSQL_TEST_USER'],
+        'PASSWORD': os.environ['PGSQL_PASSWORD'] if not IS_TESTING else os.environ['PGSQL_TEST_PASSWORD'],
         'CONN_MAX_AGE': 60 * 30,
         'TEST': {
             'NAME': os.getenv('PGSQL_TEST_DBNAME')
