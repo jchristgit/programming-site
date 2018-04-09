@@ -47,7 +47,7 @@ class CreateView(MemberRequiredMixin, generic.CreateView):
                     'title': f'New Guide posted: "{guide.title}"',
                     'author': {
                         'name': guide.author.username,
-                        'icon_url': DiscordUser.from_django_user(self.request.user).avatar_url
+                        'icon_url': DiscordUser.from_django_user(self.request.user).avatar_url()
                     },
                     'url': detail_url,
                     'description': guide.overview,
@@ -73,7 +73,7 @@ class EditView(AuthorRequiredMixin, generic.UpdateView):
                     'title': f'{self.object.author}\'s guide "{self.object.title}" was just updated!',
                     'author': {
                         'name': self.request.user.username,
-                        'icon_url': DiscordUser.from_django_user(self.request.user).avatar_url
+                        'icon_url': DiscordUser.from_django_user(self.request.user).avatar_url()
                     },
                     'url': detail_url,
                     'color': 0x0099FF
