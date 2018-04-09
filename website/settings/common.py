@@ -13,13 +13,9 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 import sys
 from pathlib import Path
 
-import bleach
-import markdown
-from bleach_whitelist import markdown_attrs, markdown_tags
 from django.contrib.messages import constants as message_constants
-from markdown.extensions.codehilite import CodeHiliteExtension
-from markdown.extensions.fenced_code import FencedCodeExtension
 
+from website.converters import markdownify
 from .discord import *  # noqa
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -162,22 +158,9 @@ STATICFILES_DIRS = [
 ]
 SITE_ID = 1
 
-# django-markupfield configuration for syntax highlighting
-MARKDOWN_EXTENSIONS = (
-    CodeHiliteExtension(),
-    FencedCodeExtension()
-)
-
-
-def _markdown(text):
-    return bleach.clean(
-        markdown.markdown(text, extensions=MARKDOWN_EXTENSIONS),
-        markdown_tags, markdown_attrs
-    )
-
 
 MARKUP_FIELD_TYPES = [
-    ('markdown', _markdown)
+    ('markdown', markdownify)
 ]
 
 
