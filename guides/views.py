@@ -22,7 +22,7 @@ class IndexView(AddIsMemberContextMixin, AddIsAdminContextMixin, generic.ListVie
     paginate_by = 10
 
 
-class DetailView(generic.DetailView):
+class DetailView(AddIsAdminContextMixin, generic.DetailView):
     model = Guide
 
     def get_context_data(self, **kwargs):
