@@ -53,8 +53,7 @@ class GuestUserHomeTests(TransactionTestCase):
     def test_profile_context(self):
         resp = self.client.get(reverse('home:profile', kwargs={'pk': self.user.id}))
 
-        self.assertFalse(resp.context['is_member'])
-        self.assertFalse(resp.context['is_admin'])
+        self.assertEqual(resp.context['user'], self.user)
 
 
 @override_settings(
@@ -92,9 +91,7 @@ class MemberUserHomeTests(TransactionTestCase):
 
     def test_profile_context(self):
         resp = self.client.get(reverse('home:profile', kwargs={'pk': self.user.id}))
-
-        self.assertTrue(resp.context['is_member'])
-        self.assertFalse(resp.context['is_admin'])
+        self.assertEqual(resp.context['user'], self.user)
 
 
 @override_settings(
@@ -131,6 +128,4 @@ class AdminUserHomeTests(TransactionTestCase):
 
     def test_profile_context(self):
         resp = self.client.get(reverse('home:profile', kwargs={'pk': self.user.id}))
-
-        self.assertTrue(resp.context['is_member'])
-        self.assertTrue(resp.context['is_admin'])
+        self.assertEqual(resp.context['user'], self.user)
