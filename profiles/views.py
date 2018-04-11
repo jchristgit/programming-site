@@ -12,6 +12,6 @@ class ProfileView(generic.DetailView):
         context = super().get_context_data(**kwargs)
         context['discord_role_membership'] = RoleMembership.objects.filter(
             guild_id=settings.DISCORD_GUILD_ID,
-            user_id=self.request.user.id
+            user_id=self.get_object().id
         ).order_by('-role__position').exclude(role__name='@everyone')
         return context
