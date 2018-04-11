@@ -189,9 +189,9 @@ class Reactions(models.Model):
 
 
 class RoleMembership(models.Model):
-    role = models.ForeignKey('Roles', models.DO_NOTHING)
+    role = models.OneToOneField('Roles', models.DO_NOTHING, primary_key=True)
     guild_id = models.BigIntegerField()
-    user = models.ForeignKey('Users', models.DO_NOTHING)
+    user = models.OneToOneField('Users', models.DO_NOTHING, primary_key=True)
 
     class Meta:
         managed = False
