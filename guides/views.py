@@ -6,6 +6,7 @@ from django.shortcuts import reverse
 from django.urls import reverse_lazy
 from django.views import generic
 
+from .forms import GuideForm
 from .models import Guide
 from stats.models import Users as DiscordUser
 from website.mixins import (
@@ -32,7 +33,7 @@ class DetailView(AddIsAdminContextMixin, generic.DetailView):
 
 
 class CreateView(MemberRequiredMixin, generic.CreateView):
-    fields = ['title', 'overview', 'content']
+    form_class = GuideForm
     model = Guide
 
     def form_valid(self, form):
@@ -56,9 +57,14 @@ class CreateView(MemberRequiredMixin, generic.CreateView):
             })
         return HttpResponseRedirect(detail_url)
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
 
 class EditView(AuthorRequiredMixin, generic.UpdateView):
-    fields = ['title', 'overview', 'content']
+    form_class = GuideForm
     model = Guide
 
     def get_success_url(self):
@@ -80,6 +86,11 @@ class EditView(AuthorRequiredMixin, generic.UpdateView):
                 }]
             })
         return HttpResponseRedirect(detail_url)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
 
 class DeleteView(AuthorRequiredMixin, generic.DeleteView):
