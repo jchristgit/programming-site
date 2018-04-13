@@ -112,7 +112,7 @@ DATABASES = {
     }
 }
 
-if not IS_TESTING:
+if not (IS_TESTING or bool(os.getenv('PGSQL_NO_SSL'))):
     DATABASES['stats']['OPTIONS'] = {'sslmode': 'require'}
 
 
