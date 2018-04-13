@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from django.test import TransactionTestCase, override_settings
+from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from guides.models import Guide
@@ -7,7 +7,7 @@ from guides.models import Guide
 from . import INDEX_GUIDE_CONTEXT_NAME
 
 
-class AdminUserUnownedGuideInteractionsTests(TransactionTestCase):
+class AdminUserUnownedGuideInteractionsTests(TestCase):
     """
     Scenario:
         - 1 existing Guide

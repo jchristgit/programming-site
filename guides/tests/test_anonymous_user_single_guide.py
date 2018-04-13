@@ -1,4 +1,4 @@
-from django.test import TransactionTestCase
+from django.test import TestCase
 from django.urls import reverse
 
 from guides.models import Guide
@@ -6,7 +6,7 @@ from guides.models import Guide
 from . import INDEX_GUIDE_CONTEXT_NAME
 
 
-class AnonymousUserSingleGuideTests(TransactionTestCase):
+class AnonymousUserSingleGuideTests(TestCase):
     """
     Scenario:
         - 1 existing Guide
