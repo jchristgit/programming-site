@@ -23,7 +23,22 @@
       <cite class="h5">
         written by<a class="strong no-underline" href="{% url 'profiles:detail' guide.author.id %}">
           @{{ guide.author.first_name }}
-        </a> on {{ guide.pub_datetime|date }}
+        </a>
+        {% for editor in guide.editors.objects %}
+          {% if forloop.first %}
+            , edited by
+          {% endif %}
+          {% if forloop.last %}
+            and
+          {% endif %}
+          <a class="no-underline" href="{% url 'profiles:detail' editor.id %}">
+            @{{ editor.first_name }}
+          </a>
+          {% if not forloop.last %}
+            ,
+          {% endif %}
+        {% endfor %}
+        on {{ guide.pub_datetime|date }}
       </cite>
     </div>
     {% if guide.author == request.user or is_admin or request.user in guide.editors %}
