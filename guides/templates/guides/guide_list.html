@@ -27,14 +27,16 @@
               <a class="no-underline" href="{% url 'guides:detail' guide.id %}">{{ guide.title }}</a>
             </h4>
           </div>
-          {% if guide.author == request.user or is_admin or request.user in guide.editors %}
-            <div class="col push-right">
-              <a href="{% url 'guides:edit' guide.id %}" style="color:deepskyblue;text-decoration:none;">&#128394;</a>
-              {% if request.user not in guide.editors %}
-                <a href="{% url 'guides:delete' guide.id %}" class="h3" style="color:red;text-decoration:none;">&times;</a>
-              {% endif %}
-            </div>
-          {% endif %}
+          {% with guide.editors.all as editors %}
+            {% if guide.author == request.user or is_admin or request.user in editors %}
+              <div class="col push-right">
+                <a href="{% url 'guides:edit' guide.id %}" style="color:deepskyblue;text-decoration:none;">&#128394;</a>
+                {% if request.user not in editors %}
+                  <a href="{% url 'guides:delete' guide.id %}" class="h3" style="color:red;text-decoration:none;">&times;</a>
+                {% endif %}
+              </div>
+            {% endif %}
+          {% endwith %}
         </div>
         <p class="guide-list-item-subtitle muted">
           written by <a class="strong no-underline" href="{% url 'profiles:detail' guide.author.id %}">
