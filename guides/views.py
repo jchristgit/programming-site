@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 
 from .forms import GuideForm
+from .mixins import AuthorOrEditorRequiredMixin
 from .models import Guide
 from stats.models import Users as DiscordUser
 from website.mixins import (
@@ -63,7 +64,7 @@ class CreateView(MemberRequiredMixin, generic.CreateView):
         return kwargs
 
 
-class EditView(AuthorRequiredMixin, generic.UpdateView):
+class EditView(AuthorOrEditorRequiredMixin, generic.UpdateView):
     form_class = GuideForm
     model = Guide
 

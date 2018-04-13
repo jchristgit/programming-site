@@ -27,10 +27,12 @@
               <a class="no-underline" href="{% url 'guides:detail' guide.id %}">{{ guide.title }}</a>
             </h4>
           </div>
-          {% if guide.author == request.user or is_admin %}
+          {% if guide.author == request.user or is_admin or request.user in guide.editors %}
             <div class="col push-right">
               <a href="{% url 'guides:edit' guide.id %}" style="color:deepskyblue;text-decoration:none;">&#128394;</a>
-              <a href="{% url 'guides:delete' guide.id %}" class="h3" style="color:red;text-decoration:none;">&times;</a>
+              {% if request.user not in guide.editors %}
+                <a href="{% url 'guides:delete' guide.id %}" class="h3" style="color:red;text-decoration:none;">&times;</a>
+              {% endif %}
             </div>
           {% endif %}
         </div>
