@@ -101,19 +101,3 @@ class DeleteView(AuthorRequiredMixin, generic.DeleteView):
     def delete(self, *args, **kwargs):
         messages.success(self.request, self.success_message.format(self.get_object().title))
         return super().delete(*args, **kwargs)
-
-    def form_valid(self, form):
-        author_profile = self.request.build_absolute_uri(reverse('home:profile', kwargs={'pk': self.object.author.id}))
-        if settings.DISCORD_WEBHOOK_URL is not None and not settings.IS_TESTING:
-            requests.post(settings.DISCORD_WEBHOOK_URL, json={
-                'embeds': [{
-                    'title': f'{self.object.author}\'s guide "{self.object.title}" was deleted.',
-                    'author': {
-                        'name': self.request.user.username,
-                        'icon_url': DiscordUser.from_django_user(self.request.user).avatar_url
-                    },
-                    'url': author_profile,
-                    'color': 0xFF3300
-                }]
-            })
-        return HttpResponseRedirect(author_profile)
