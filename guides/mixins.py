@@ -17,10 +17,10 @@ class AuthorOrEditorRequiredMixin:
         guide = self.get_object()
 
         is_author = self.request.user == guide.author
-        is_admin = RoleMembership.objects.using('stats').filter(
+        is_admin = RoleMembership.objects.using("stats").filter(
             user_id=request.user.id,
             guild_id=settings.DISCORD_GUILD_ID,
-            role_id=settings.DISCORD_ADMIN_ROLE_ID
+            role_id=settings.DISCORD_ADMIN_ROLE_ID,
         ).exists()
         is_editor = guide.editors.filter(id=self.request.user.id).exists()
 

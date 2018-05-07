@@ -3,7 +3,8 @@
 #   * Rearrange models' order
 #   * Make sure each model has one field with primary_key=True
 #   * Make sure each ForeignKey has `on_delete` set to the desired behavior.
-#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
+#   * Remove `managed = False` lines if you wish to allow Django
+#     to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.conf import settings
 from django.db import models
@@ -13,13 +14,14 @@ class AuditLog(models.Model):
     audit_entry_id = models.BigAutoField(primary_key=True)
     guild_id = models.BigIntegerField()
     action = models.TextField()  # This field type is a guess.
-    user = models.ForeignKey('Users', models.DO_NOTHING)
+    user = models.ForeignKey("Users", models.DO_NOTHING)
     reason = models.TextField(blank=True, null=True)
-    category = models.TextField(blank=True, null=True)  # This field type is a guess.
+    # This field type is a guess.
+    category = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'audit_log'
+        db_table = "audit_log"
 
 
 class AuditLogChanges(models.Model):
@@ -30,8 +32,8 @@ class AuditLogChanges(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'audit_log_changes'
-        unique_together = (('audit_entry', 'state'),)
+        db_table = "audit_log_changes"
+        unique_together = (("audit_entry", "state"),)
 
 
 class AuditLogCrawl(models.Model):
@@ -40,7 +42,7 @@ class AuditLogCrawl(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'audit_log_crawl'
+        db_table = "audit_log_crawl"
 
 
 class ChannelCategories(models.Model):
@@ -50,12 +52,16 @@ class ChannelCategories(models.Model):
     is_deleted = models.BooleanField()
     is_nsfw = models.BooleanField()
     changed_roles = models.TextField()  # This field type is a guess.
-    parent_category = models.ForeignKey('self', models.DO_NOTHING, blank=True, null=True)
+    parent_category = models.ForeignKey(
+        "self", models.DO_NOTHING, blank=True, null=True
+    )
     guild_id = models.BigIntegerField()
 
     class Meta:
         managed = False
-        db_table = 'channel_categories'
+        db_table = "channel_categories"
+
+
 # Unable to inspect table 'channel_crawl'
 # The error was: permission denied for relation channel_crawl
 
@@ -68,12 +74,14 @@ class Channels(models.Model):
     position = models.IntegerField()
     topic = models.TextField(blank=True, null=True)
     changed_roles = models.TextField()  # This field type is a guess.
-    category = models.ForeignKey(ChannelCategories, models.DO_NOTHING, blank=True, null=True)
+    category = models.ForeignKey(
+        ChannelCategories, models.DO_NOTHING, blank=True, null=True
+    )
     guild_id = models.BigIntegerField()
 
     class Meta:
         managed = False
-        db_table = 'channels'
+        db_table = "channels"
 
 
 class Emojis(models.Model):
@@ -84,17 +92,18 @@ class Emojis(models.Model):
     is_deleted = models.BooleanField()
     name = models.TextField()  # This field type is a guess.
     category = models.TextField()  # This field type is a guess.
-    roles = models.TextField(blank=True, null=True)  # This field type is a guess.
+    # This field type is a guess.
+    roles = models.TextField(blank=True, null=True)
     guild_id = models.BigIntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'emojis'
-        unique_together = (('emoji_id', 'emoji_unicode'),)
+        db_table = "emojis"
+        unique_together = (("emoji_id", "emoji_unicode"),)
 
 
 class GuildMembership(models.Model):
-    user = models.OneToOneField('Users', models.DO_NOTHING, primary_key=True)
+    user = models.OneToOneField("Users", models.DO_NOTHING, primary_key=True)
     guild_id = models.BigIntegerField()
     is_member = models.BooleanField()
     joined_at = models.DateTimeField(blank=True, null=True)
@@ -102,13 +111,13 @@ class GuildMembership(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'guild_membership'
-        unique_together = (('user', 'guild_id'),)
+        db_table = "guild_membership"
+        unique_together = (("user", "guild_id"),)
 
 
 class Guilds(models.Model):
     guild_id = models.BigAutoField(primary_key=True)
-    owner = models.ForeignKey('Users', models.DO_NOTHING)
+    owner = models.ForeignKey("Users", models.DO_NOTHING)
     name = models.TextField()
     icon = models.TextField()
     voice_region = models.TextField()  # This field type is a guess.
@@ -122,20 +131,20 @@ class Guilds(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'guilds'
+        db_table = "guilds"
 
 
 class Mentions(models.Model):
     mentioned_id = models.BigIntegerField(primary_key=True)
     type = models.TextField()  # This field type is a guess.
-    message = models.ForeignKey('Messages', models.DO_NOTHING)
+    message = models.ForeignKey("Messages", models.DO_NOTHING)
     channel = models.ForeignKey(Channels, models.DO_NOTHING)
     guild_id = models.BigIntegerField()
 
     class Meta:
         managed = False
-        db_table = 'mentions'
-        unique_together = (('mentioned_id', 'type', 'message'),)
+        db_table = "mentions"
+        unique_together = (("mentioned_id", "type", "message"),)
 
 
 class Messages(models.Model):
@@ -155,28 +164,28 @@ class Messages(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'messages'
+        db_table = "messages"
 
 
 class Pins(models.Model):
     pin_id = models.BigIntegerField(primary_key=True)
     message = models.ForeignKey(Messages, models.DO_NOTHING)
-    pinner = models.ForeignKey('Users', models.DO_NOTHING, related_name='pinner')
-    user = models.ForeignKey('Users', models.DO_NOTHING)
+    pinner = models.ForeignKey("Users", models.DO_NOTHING, related_name="pinner")
+    user = models.ForeignKey("Users", models.DO_NOTHING)
     channel = models.ForeignKey(Channels, models.DO_NOTHING)
     guild_id = models.BigIntegerField()
 
     class Meta:
         managed = False
-        db_table = 'pins'
-        unique_together = (('pin_id', 'message'),)
+        db_table = "pins"
+        unique_together = (("pin_id", "message"),)
 
 
 class Reactions(models.Model):
     message_id = models.BigIntegerField()
     emoji_id = models.BigIntegerField()
     emoji_unicode = models.CharField(max_length=7)
-    user = models.ForeignKey('Users', models.DO_NOTHING)
+    user = models.ForeignKey("Users", models.DO_NOTHING)
     created_at = models.DateTimeField(blank=True, null=True)
     deleted_at = models.DateTimeField(blank=True, null=True)
     channel = models.ForeignKey(Channels, models.DO_NOTHING)
@@ -184,19 +193,21 @@ class Reactions(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'reactions'
-        unique_together = (('message_id', 'emoji_id', 'emoji_unicode', 'user', 'created_at'),)
+        db_table = "reactions"
+        unique_together = (
+            ("message_id", "emoji_id", "emoji_unicode", "user", "created_at"),
+        )
 
 
 class RoleMembership(models.Model):
-    role = models.OneToOneField('Roles', models.DO_NOTHING, primary_key=True)
+    role = models.OneToOneField("Roles", models.DO_NOTHING, primary_key=True)
     guild_id = models.BigIntegerField()
-    user = models.OneToOneField('Users', models.DO_NOTHING, primary_key=True)
+    user = models.OneToOneField("Users", models.DO_NOTHING, primary_key=True)
 
     class Meta:
         managed = False
-        db_table = 'role_membership'
-        unique_together = (('role', 'user'),)
+        db_table = "role_membership"
+        unique_together = (("role", "user"),)
 
 
 class Roles(models.Model):
@@ -213,19 +224,19 @@ class Roles(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'roles'
+        db_table = "roles"
 
 
 class Typing(models.Model):
     timestamp = models.DateTimeField()
-    user = models.ForeignKey('Users', models.DO_NOTHING)
+    user = models.ForeignKey("Users", models.DO_NOTHING)
     channel = models.ForeignKey(Channels, models.DO_NOTHING)
     guild_id = models.BigIntegerField()
 
     class Meta:
         managed = False
-        db_table = 'typing'
-        unique_together = (('timestamp', 'user', 'channel', 'guild_id'),)
+        db_table = "typing"
+        unique_together = (("timestamp", "user", "channel", "guild_id"),)
 
 
 class Users(models.Model):
@@ -238,16 +249,14 @@ class Users(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'users'
+        db_table = "users"
 
     @classmethod
     def from_django_user(cls, django_user: settings.AUTH_USER_MODEL):
-        return cls.objects.using('stats').filter(
-            user_id=django_user.id
-        ).first()
+        return cls.objects.using("stats").filter(user_id=django_user.id).first()
 
     def avatar_url(self, size=64):
-        return f'https://cdn.discordapp.com/avatars/{self.user_id}/{self.avatar}.png?size={size}'
+        return f"https://cdn.discordapp.com/avatars/{self.user_id}/{self.avatar}.png?size={size}"
 
 
 class VoiceChannels(models.Model):
@@ -258,9 +267,11 @@ class VoiceChannels(models.Model):
     bitrate = models.IntegerField()
     user_limit = models.IntegerField()
     changed_roles = models.TextField()  # This field type is a guess.
-    category = models.ForeignKey(ChannelCategories, models.DO_NOTHING, blank=True, null=True)
+    category = models.ForeignKey(
+        ChannelCategories, models.DO_NOTHING, blank=True, null=True
+    )
     guild_id = models.BigIntegerField()
 
     class Meta:
         managed = False
-        db_table = 'voice_channels'
+        db_table = "voice_channels"

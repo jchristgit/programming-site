@@ -1,11 +1,7 @@
 from django.conf import settings
 from django.http import HttpResponseForbidden
 
-from stats.models import (
-    GuildMembership,
-    RoleMembership,
-    Users as DiscordUser
-)
+from stats.models import GuildMembership, RoleMembership, Users as DiscordUser
 
 
 class MemberRequiredMixin:
@@ -16,10 +12,8 @@ class MemberRequiredMixin:
     """
 
     def dispatch(self, request, *args, **kwargs):
-        is_member = GuildMembership.objects.using('stats').filter(
-            user_id=request.user.id,
-            guild_id=settings.DISCORD_GUILD_ID,
-            is_member=True
+        is_member = GuildMembership.objects.using("stats").filter(
+            user_id=request.user.id, guild_id=settings.DISCORD_GUILD_ID, is_member=True
         ).exists()
         if not is_member:
             return HttpResponseForbidden()
@@ -37,10 +31,10 @@ class AuthorRequiredMixin:
 
     def dispatch(self, request, *args, **kwargs):
         is_author = self.request.user == self.get_object().author
-        is_admin = RoleMembership.objects.using('stats').filter(
+        is_admin = RoleMembership.objects.using("stats").filter(
             user_id=request.user.id,
             guild_id=settings.DISCORD_GUILD_ID,
-            role_id=settings.DISCORD_ADMIN_ROLE_ID
+            role_id=settings.DISCORD_ADMIN_ROLE_ID,
         ).exists()
         if not (is_author or is_admin):
             return HttpResponseForbidden()
@@ -56,7 +50,7 @@ class AddRequestDiscordUserMixin:
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['discord_user'] = DiscordUser.from_django_user(self.request.user)
+        context["discord_user"] = DiscordUser.from_django_user(self.request.user)
         return context
 
 
@@ -69,10 +63,10 @@ class AddIsMemberContextMixin:
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['is_member'] = GuildMembership.objects.using('stats').filter(
+        context["is_member"] = GuildMembership.objects.using("stats").filter(
             user_id=self.request.user.id,
             guild_id=settings.DISCORD_GUILD_ID,
-            is_member=True
+            is_member=True,
         ).exists()
         return context
 
@@ -88,9 +82,9 @@ class AddIsAdminContextMixin:
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['is_admin'] = RoleMembership.objects.using('stats').filter(
+        context["is_admin"] = RoleMembership.objects.using("stats").filter(
             user_id=self.request.user.id,
             guild_id=settings.DISCORD_GUILD_ID,
-            role_id=settings.DISCORD_ADMIN_ROLE_ID
+            role_id=settings.DISCORD_ADMIN_ROLE_ID,
         ).exists()
         return context

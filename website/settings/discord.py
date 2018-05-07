@@ -3,10 +3,10 @@
 import os
 
 # The guild ID to be used for permission checks.
-DISCORD_GUILD_ID = int(os.getenv('DISCORD_GUILD_ID', 181866934353133570))
+DISCORD_GUILD_ID = int(os.getenv("DISCORD_GUILD_ID", 181866934353133570))
 
 # The webhook URL to send new events to.
-DISCORD_WEBHOOK_URL = os.getenv('DISCORD_WEBHOOK_URL')
+DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL")
 
 # The role ID of the Administrator role.
-DISCORD_ADMIN_ROLE_ID = int(os.getenv('DISCORD_ADMIN_ROLE_ID', 290546513656938496))
+DISCORD_ADMIN_ROLE_ID = int(os.getenv("DISCORD_ADMIN_ROLE_ID", 290546513656938496))

@@ -9,21 +9,39 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-    ]
+    dependencies = [migrations.swappable_dependency(settings.AUTH_USER_MODEL)]
 
     operations = [
         migrations.CreateModel(
-            name='Guide',
+            name="Guide",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=100)),
-                ('overview', models.TextField(help_text='A short overview of the guide, used for preview information and in OGP tags.', max_length=200)),
-                ('content', models.TextField()),
-                ('pub_datetime', models.DateTimeField(auto_now_add=True)),
-                ('edit_datetime', models.DateTimeField(auto_now=True)),
-                ('author', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=100)),
+                (
+                    "overview",
+                    models.TextField(
+                        help_text="A short overview of the guide, used for preview information and in OGP tags.",
+                        max_length=200,
+                    ),
+                ),
+                ("content", models.TextField()),
+                ("pub_datetime", models.DateTimeField(auto_now_add=True)),
+                ("edit_datetime", models.DateTimeField(auto_now=True)),
+                (
+                    "author",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
-        ),
+        )
     ]

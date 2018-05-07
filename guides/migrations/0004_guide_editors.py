@@ -8,13 +8,17 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('guides', '0003_change_ordering_add_help_texts_apply_cascade'),
+        ("guides", "0003_change_ordering_add_help_texts_apply_cascade"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='guide',
-            name='editors',
-            field=models.ManyToManyField(help_text='Add editors to your Guide. You will always stay the sole owner of it, and can add and remove editors freely.', related_name='_guide_editors_+', to=settings.AUTH_USER_MODEL),
-        ),
+            model_name="guide",
+            name="editors",
+            field=models.ManyToManyField(
+                help_text="Add editors to your Guide. You will always stay the sole owner of it, and can add and remove editors freely.",
+                related_name="_guide_editors_+",
+                to=settings.AUTH_USER_MODEL,
+            ),
+        )
     ]

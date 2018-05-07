@@ -5,6 +5,9 @@ name = "pypi"
 
 [dev-packages]
 gunicorn = "==19.7.1"
+"flake8" = "*"
+"flake8-import-order" = "*"
+"flake8-bugbear" = "*"
 
 [packages]
 Django = "==2.0.3"

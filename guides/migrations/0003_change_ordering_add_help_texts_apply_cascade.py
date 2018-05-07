@@ -8,28 +8,33 @@ import markupfield.fields
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('guides', '0002_change_content_to_markup_field'),
-    ]
+    dependencies = [("guides", "0002_change_content_to_markup_field")]
 
     operations = [
         migrations.AlterModelOptions(
-            name='guide',
-            options={'ordering': ['-pub_datetime']},
+            name="guide", options={"ordering": ["-pub_datetime"]}
         ),
         migrations.AlterField(
-            model_name='guide',
-            name='author',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="guide",
+            name="author",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL
+            ),
         ),
         migrations.AlterField(
-            model_name='guide',
-            name='content',
-            field=markupfield.fields.MarkupField(help_text='Markdown with fenced code blocks (GFM) is supported.', rendered_field=True),
+            model_name="guide",
+            name="content",
+            field=markupfield.fields.MarkupField(
+                help_text="Markdown with fenced code blocks (GFM) is supported.",
+                rendered_field=True,
+            ),
         ),
         migrations.AlterField(
-            model_name='guide',
-            name='title',
-            field=models.CharField(help_text='Give your guide a readable and descriptive title.', max_length=100),
+            model_name="guide",
+            name="title",
+            field=models.CharField(
+                help_text="Give your guide a readable and descriptive title.",
+                max_length=100,
+            ),
         ),
     ]

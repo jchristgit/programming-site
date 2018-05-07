@@ -1,0 +1,32 @@
+language: python
+
+python:
+  - "3.6"
+
+install:
+  - pip install pipenv
+  - pipenv install --dev
+
+before_script:
+  - psql -c 'CREATE DATABASE django_test;' -U postgres
+  - psql -c 'CREATE USER django;' -U postgres
+  - psql -c 'ALTER DATABASE django_test OWNER TO django;' -U postgres
+  - psql -c 'ALTER USER django WITH superuser;' -U postgres
+
+script:
+  - pipenv run flake8 --exclude .venv,**/migrations/*
+  - pipenv run python manage.py test --keepdb
+
+services:
+  - postgresql
+
+env:
+    global:
+        - PIPENV_VENV_IN_PROJECT=1
+        - PIPENV_IGNORE_VIRTUALENVS=1
+
+notifications:
+    email: never
+
+services:
+  - postgresql

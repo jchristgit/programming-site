@@ -3,3 +3,4 @@ __pycache__
 Pipfile.lock
 *.sqlite3
 .env
+.venv

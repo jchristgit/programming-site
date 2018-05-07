@@ -4,12 +4,10 @@ import sys
 
 if __name__ == "__main__":
     # Check whether we're running `collectstatic` or `check --deploy`
-    if any(cmd in sys.argv for cmd in ('collectstatic', '--deploy')):
-        os.environ.setdefault("DJANGO_SETTINGS_MODULE",
-                              "website.settings.prod")
+    if any(cmd in sys.argv for cmd in ("collectstatic", "--deploy")):
+        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "website.settings.prod")
     else:
-        os.environ.setdefault("DJANGO_SETTINGS_MODULE",
-                              "website.settings.debug")
+        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "website.settings.debug")
 
     try:
         from django.core.management import execute_from_command_line

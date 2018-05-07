@@ -1,0 +1,9 @@
+[flake8]
+exclude =
+    .git,
+    __pycache__
+    .venv
+    **/migrations/*
+max-line-length = 99
+import-order-style = pycharm
+application-import-names = home,profiles,stats,guides,website

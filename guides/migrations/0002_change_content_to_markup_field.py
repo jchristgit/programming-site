@@ -6,25 +6,28 @@ import markupfield.fields
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('guides', '0001_initial'),
-    ]
+    dependencies = [("guides", "0001_initial")]
 
     operations = [
         migrations.AddField(
-            model_name='guide',
-            name='_content_rendered',
-            field=models.TextField(default='', editable=False),
+            model_name="guide",
+            name="_content_rendered",
+            field=models.TextField(default="", editable=False),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='guide',
-            name='content_markup_type',
-            field=models.CharField(choices=[('', '--'), ('markdown', 'markdown')], default='markdown', editable=False, max_length=30),
+            model_name="guide",
+            name="content_markup_type",
+            field=models.CharField(
+                choices=[("", "--"), ("markdown", "markdown")],
+                default="markdown",
+                editable=False,
+                max_length=30,
+            ),
         ),
         migrations.AlterField(
-            model_name='guide',
-            name='content',
+            model_name="guide",
+            name="content",
             field=markupfield.fields.MarkupField(rendered_field=True),
         ),
     ]

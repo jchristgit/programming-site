@@ -9,7 +9,7 @@ from .models import Guide
 class LatestGuidesRSSFeed(Feed):
     title = "Latest Programming Guides"
     description = "Newest programming guides created by our Members."
-    link = reverse_lazy('guides:feed_rss')
+    link = reverse_lazy("guides:feed_rss")
 
     def items(self):
         return Guide.objects.all()
@@ -21,7 +21,7 @@ class LatestGuidesRSSFeed(Feed):
         return item.content
 
     def item_link(self, item):
-        return reverse('guides:detail', kwargs={'pk': item.id})
+        return reverse("guides:detail", kwargs={"pk": item.id})
 
     def item_pubdate(self, item):
         return item.pub_datetime
@@ -33,10 +33,10 @@ class LatestGuidesRSSFeed(Feed):
         return item.author.first_name
 
     def item_author_link(self, item):
-        return reverse('home:profile', kwargs={'pk': item.author.id})
+        return reverse("home:profile", kwargs={"pk": item.author.id})
 
 
 class LatestGuidesAtomFeed(LatestGuidesRSSFeed):
     feed_type = Atom1Feed
     subtitle = LatestGuidesRSSFeed.description
-    link = reverse_lazy('guides:feed_atom')
+    link = reverse_lazy("guides:feed_atom")
