@@ -20,25 +20,21 @@
 </head>
 
 <body class="max-w-big push-center">
-<nav class="row">
-  <div class="col col-2">
-    <code class="monospace label text-left">
-      {% if request.user.is_authenticated %}
-        {# If the user has their Discord account connected, show that #}
-        <a class="black strong" href="{% url 'profiles:detail' user.id %}">{{ request.user.first_name }}</a>@programming$
-      {% else %}
-        {# If the user is not logged in, provide a link to Discord OAuth #}
-        <a class="black strong" href="{% provider_login_url 'discord' next='/' %}">$(YOUR_NAME)</a>@programming$
-      {% endif %}
-    </code>
-  </div>
-  <div class="col push-center">
-    <a href="{% url 'home:index' %}">Home</a>
-    &nbsp;
-    <a href="{% url 'guides:index' %}">Guides</a>
-    &nbsp;
-    <a href="{% url 'stats:index' %}">Statistics</a>
-  </div>
+<nav class="navbar">
+  <code class="nav-title monospace label text-left">
+    {% if request.user.is_authenticated %}
+      {# If the user has their Discord account connected, show that #}
+      <a class="black strong" href="{% url 'profiles:detail' user.id %}">{{ request.user.first_name }}</a>@programming$
+    {% else %}
+      {# If the user is not logged in, provide a link to Discord OAuth #}
+      <a class="black strong" href="{% provider_login_url 'discord' next='/' %}">$(YOUR_NAME)</a>@programming$
+    {% endif %}
+  </code>
+  <a class="nav-link" href="{% url 'home:index' %}">Home</a>
+  &nbsp;
+  <a class="nav-link" href="{% url 'guides:index' %}">Guides</a>
+  &nbsp;
+  <a class="nav-link" href="{% url 'stats:index' %}">Stats</a>
 </nav>
 {% if messages %}
   {% for message in messages %}

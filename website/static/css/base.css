@@ -9,3 +9,21 @@ html {
     -moz-osx-font-smoothing: grayscale;
     background-color: #d0d0d0;
 }
+
+.navbar {
+    display: flex;
+}
+
+.nav-title {
+    margin-right: auto;
+}
+
+.nav-link {
+    margin-left: 1em;
+    margin-right: 1em;
+    font-weight: bolder;
+}
+
+a {
+    text-decoration: none;
+}
