@@ -49,4 +49,3 @@ class MemberUserHomeTests(TestCase):
     def test_index_context_member_count_is_one(self):
         resp = self.client.get(reverse("home:index"))
         self.assertEqual(resp.context["total_members"], 1)
-

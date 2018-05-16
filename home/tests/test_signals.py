@@ -14,7 +14,7 @@ class HomeSignalsTests(TestCase):
 
     def test_no_oauth_connection_gets_no_groups(self):
         no_oauth_user = User.objects.create_user('nooauthuser', password='testpassword')
-        self.assertSequenceEqual( no_oauth_user.groups.all(), [])
+        self.assertSequenceEqual(no_oauth_user.groups.all(), [])
 
     def test_discord_guest_gets_guest_group(self):
         member_user = User.objects.create_user('guestuser', password='testpassword')
