@@ -11,7 +11,7 @@ class AnonymousUserProfilesTests(TestCase):
     """
 
     def test_detail_status_404(self):
-        resp = self.client.get(reverse("profiles:detail", kwargs={"pk": 1}))
+        resp = self.client.get(reverse("profiles:detail", kwargs={"pk": 214}))
         self.assertEqual(resp.status_code, 404)
 
 
