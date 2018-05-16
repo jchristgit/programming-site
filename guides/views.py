@@ -66,11 +66,6 @@ class CreateView(MemberRequiredMixin, generic.CreateView):
             )
         return HttpResponseRedirect(detail_url)
 
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs["user"] = self.request.user
-        return kwargs
-
 
 class EditView(AuthorOrEditorRequiredMixin, generic.UpdateView):
     fields = ['title', 'overview', 'content']
@@ -105,11 +100,6 @@ class EditView(AuthorOrEditorRequiredMixin, generic.UpdateView):
                 },
             )
         return HttpResponseRedirect(detail_url)
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs["user"] = self.request.user
-        return kwargs
 
 
 class DeleteView(AuthorRequiredMixin, generic.DeleteView):

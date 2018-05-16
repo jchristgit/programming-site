@@ -1,7 +1,8 @@
+from allauth.socialaccount.models import SocialAccount
 from django.conf import settings
 from django.http import HttpResponseForbidden
 
-from stats.models import GuildMembership, RoleMembership, Users as DiscordUser
+from stats.models import GuildMembership, RoleMembership
 
 
 class MemberRequiredMixin:
@@ -12,9 +13,14 @@ class MemberRequiredMixin:
     """
 
     def dispatch(self, request, *args, **kwargs):
-        is_member = GuildMembership.objects.using("stats").filter(
-            user_id=request.user.id, guild_id=settings.DISCORD_GUILD_ID, is_member=True
+        if not request.user.is_authenticated:
+            return HttpResponseForbidden()
+
+        social_account = SocialAccount.objects.get(user=request.user)
+        is_member = GuildMembership.objects.filter(
+            user_id=social_account.uid, guild_id=settings.DISCORD_GUILD_ID, is_member=True
         ).exists()
+
         if not is_member:
             return HttpResponseForbidden()
         return super().dispatch(request, *args, **kwargs)
@@ -30,12 +36,18 @@ class AuthorRequiredMixin:
     """
 
     def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponseForbidden()
+
+        social_account = SocialAccount.objects.get(user=request.user)
+
         is_author = self.request.user == self.get_object().author
-        is_admin = RoleMembership.objects.using("stats").filter(
-            user_id=request.user.id,
+        is_admin = RoleMembership.objects.filter(
+            user_id=social_account.uid,
             guild_id=settings.DISCORD_GUILD_ID,
             role_id=settings.DISCORD_ADMIN_ROLE_ID,
         ).exists()
+
         if not (is_author or is_admin):
             return HttpResponseForbidden()
         return super().dispatch(request, *args, **kwargs)
@@ -43,14 +55,18 @@ class AuthorRequiredMixin:
 
 class AddRequestDiscordUserMixin:
     """
-    Adds `discord_user` to a template which is
-    constructed from the user id of `request.user`.
+    Adds the `discord_user` context variable to a template which is
+    constructed from the socialaccount attached to `request.user`.
     If the logged in user is anonymous, this is `None`.
     """
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["discord_user"] = DiscordUser.from_django_user(self.request.user)
+        if not self.request.user.is_authenticated:
+            context['discord_user'] = None
+        else:
+            social_account = SocialAccount.objects.get(user=self.request.user)
+            context['discord_user'] = social_account
         return context
 
 
@@ -58,16 +74,23 @@ class AddIsMemberContextMixin:
     """
     Adds `is_member` to the template context which
     specifies whether the request user is a member
-    of the guild specified as `DISCORD_GUILD_ID`.
+    of the guild specified as `settings.DISCORD_GUILD_ID`.
     """
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["is_member"] = GuildMembership.objects.using("stats").filter(
-            user_id=self.request.user.id,
-            guild_id=settings.DISCORD_GUILD_ID,
-            is_member=True,
-        ).exists()
+
+        if not self.request.user.is_authenticated:
+            context['is_member'] = False
+        else:
+            social_account = SocialAccount.objects.get(user=self.request.user)
+            is_member = GuildMembership.objects.filter(
+                user_id=social_account.uid,
+                guild_id=settings.DISCORD_GUILD_ID,
+                is_member=True,
+            ).exists()
+
+            context['is_member'] = is_member
         return context
 
 
@@ -82,9 +105,14 @@ class AddIsAdminContextMixin:
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["is_admin"] = RoleMembership.objects.using("stats").filter(
-            user_id=self.request.user.id,
-            guild_id=settings.DISCORD_GUILD_ID,
-            role_id=settings.DISCORD_ADMIN_ROLE_ID,
-        ).exists()
+        if not self.request.user.is_authenticated:
+            context['is_admin'] = False
+        else:
+            social_account = SocialAccount.objects.get(user=self.request.user)
+            is_admin = RoleMembership.objects.filter(
+                user_id=social_account.uid,
+                guild_id=settings.DISCORD_GUILD_ID,
+                role_id=settings.DISCORD_ADMIN_ROLE_ID,
+            ).exists()
+            context['is_admin'] = is_admin
         return context

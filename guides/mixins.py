@@ -1,3 +1,4 @@
+from allauth.socialaccount.models import SocialAccount
 from django.conf import settings
 from django.http import HttpResponseForbidden
 
@@ -14,11 +15,15 @@ class AuthorOrEditorRequiredMixin:
     """
 
     def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponseForbidden()
+
         guide = self.get_object()
 
         is_author = self.request.user == guide.author
+        social_account = SocialAccount.objects.get(user=self.request.user)
         is_admin = RoleMembership.objects.using("stats").filter(
-            user_id=request.user.id,
+            user_id=social_account.uid,
             guild_id=settings.DISCORD_GUILD_ID,
             role_id=settings.DISCORD_ADMIN_ROLE_ID,
         ).exists()
