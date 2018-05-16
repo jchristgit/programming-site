@@ -8,20 +8,16 @@ from django.views import generic
 from guardian.mixins import PermissionRequiredMixin
 
 from stats.models import Users as DiscordUser
-from website.mixins import (
-    AddIsAdminContextMixin,
-    AddIsMemberContextMixin,
-)
 from .models import Guide
 
 
-class IndexView(AddIsMemberContextMixin, AddIsAdminContextMixin, generic.ListView):
+class IndexView(generic.ListView):
     context_object_name = "latest_guides"
     model = Guide
     paginate_by = 10
 
 
-class DetailView(AddIsAdminContextMixin, generic.DetailView):
+class DetailView(generic.DetailView):
     model = Guide
 
     def get_context_data(self, **kwargs):
