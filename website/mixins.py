@@ -14,15 +14,19 @@ class MemberRequiredMixin:
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return HttpResponseForbidden()
+            return HttpResponseForbidden("You need to be logged in to do that.")
 
-        social_account = SocialAccount.objects.get(user=request.user)
+        try:
+            social_account = SocialAccount.objects.get(user=request.user)
+        except SocialAccount.DoesNotExist:
+            return HttpResponseForbidden("You need to be logged in with Discord to do that.")
+
         is_member = GuildMembership.objects.filter(
             user_id=social_account.uid, guild_id=settings.DISCORD_GUILD_ID, is_member=True
         ).exists()
 
         if not is_member:
-            return HttpResponseForbidden()
+            return HttpResponseForbidden("You need to be a member of our Guild to do that.")
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -37,9 +41,12 @@ class AuthorRequiredMixin:
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return HttpResponseForbidden()
+            return HttpResponseForbidden("You need to be logged in to do that.")
 
-        social_account = SocialAccount.objects.get(user=request.user)
+        try:
+            social_account = SocialAccount.objects.get(user=request.user)
+        except SocialAccount.DoesNotExist:
+            return HttpResponseForbidden("You need to be logged in with Discord to do that.")
 
         is_author = self.request.user == self.get_object().author
         is_admin = RoleMembership.objects.filter(
@@ -49,7 +56,7 @@ class AuthorRequiredMixin:
         ).exists()
 
         if not (is_author or is_admin):
-            return HttpResponseForbidden()
+            return HttpResponseForbidden("You need to be the guide's author to do that.")
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -65,8 +72,10 @@ class AddRequestDiscordUserMixin:
         if not self.request.user.is_authenticated:
             context['discord_user'] = None
         else:
-            social_account = SocialAccount.objects.get(user=self.request.user)
-            context['discord_user'] = social_account
+            try:
+                context['discord_user'] = SocialAccount.objects.get(user=self.request.user)
+            except SocialAccount.DoesNotExist:
+                context['discord_user'] = None
         return context
 
 
@@ -83,14 +92,16 @@ class AddIsMemberContextMixin:
         if not self.request.user.is_authenticated:
             context['is_member'] = False
         else:
-            social_account = SocialAccount.objects.get(user=self.request.user)
-            is_member = GuildMembership.objects.filter(
-                user_id=social_account.uid,
-                guild_id=settings.DISCORD_GUILD_ID,
-                is_member=True,
-            ).exists()
-
-            context['is_member'] = is_member
+            try:
+                social_account = SocialAccount.objects.get(user=self.request.user)
+            except SocialAccount.DoesNotExist:
+                context['is_member'] = False
+            else:
+                context['is_member'] = GuildMembership.objects.filter(
+                    user_id=social_account.uid,
+                    guild_id=settings.DISCORD_GUILD_ID,
+                    is_member=True,
+                ).exists()
         return context
 
 
@@ -108,11 +119,14 @@ class AddIsAdminContextMixin:
         if not self.request.user.is_authenticated:
             context['is_admin'] = False
         else:
-            social_account = SocialAccount.objects.get(user=self.request.user)
-            is_admin = RoleMembership.objects.filter(
-                user_id=social_account.uid,
-                guild_id=settings.DISCORD_GUILD_ID,
-                role_id=settings.DISCORD_ADMIN_ROLE_ID,
-            ).exists()
-            context['is_admin'] = is_admin
+            try:
+                social_account = SocialAccount.objects.get(user=self.request.user)
+            except SocialAccount.DoesNotExist:
+                context['is_admin'] = False
+            else:
+                context['is_admin'] = RoleMembership.objects.filter(
+                    user_id=social_account.uid,
+                    guild_id=settings.DISCORD_GUILD_ID,
+                    role_id=settings.DISCORD_ADMIN_ROLE_ID,
+                ).exists()
         return context

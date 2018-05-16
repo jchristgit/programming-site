@@ -16,18 +16,22 @@ class AuthorOrEditorRequiredMixin:
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return HttpResponseForbidden()
+            return HttpResponseForbidden("You need to be logged in to do that.")
 
         guide = self.get_object()
 
+        try:
+            social_account = SocialAccount.objects.get(user=self.request.user)
+        except SocialAccount.DoesNotExist:
+            return HttpResponseForbidden()
+
         is_author = self.request.user == guide.author
-        social_account = SocialAccount.objects.get(user=self.request.user)
-        is_admin = RoleMembership.objects.using("stats").filter(
+        is_admin = RoleMembership.objects.filter(
             user_id=social_account.uid,
             guild_id=settings.DISCORD_GUILD_ID,
             role_id=settings.DISCORD_ADMIN_ROLE_ID,
         ).exists()
 
         if not (is_author or is_admin):
-            return HttpResponseForbidden()
+            return HttpResponseForbidden("You need to be the author of this guide to edit it.")
         return super().dispatch(request, *args, **kwargs)
