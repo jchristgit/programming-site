@@ -44,12 +44,14 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.discord",
+    "guardian",
     "widget_tweaks",
 ]
 
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
+    "guardian.backends.ObjectPermissionBackend"
 )
 
 SOCIALACCOUNT_EMAIL_VERIFICATION = "none"
