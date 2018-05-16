@@ -79,11 +79,6 @@ class MemberUserHomeTests(TestCase):
         )
 
     def setUp(self):
-        # self.user = User.objects.first()
-        # FIXME: Django doesn't seem to clean up the other objects
-        #        in the GuildMembership table created by other test cases.
-        #        This causes `total_members` on index to be wrong. (2 != 1)
-        # GuildMembership.objects.exclude(user__user_id=self.user.id).delete()
         self.client.force_login(self.user)
 
     def test_index_status_200(self):
@@ -150,9 +145,6 @@ class AdminUserHomeTests(TestCase):
         )
 
     def setUp(self):
-        # self.user = User.objects.first()
-        # FIXME: see above
-        # GuildMembership.objects.exclude(user__user_id=self.user.id).delete()
         self.client.force_login(self.user)
 
     def test_index_status_200(self):
