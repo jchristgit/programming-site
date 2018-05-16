@@ -167,3 +167,5 @@ MESSAGE_TAGS = {
 
 # TEST_RUNNER = 'website.runners.ManagedModelTestRunner'
 DATABASE_ROUTERS = ["website.routers.StatbotRouter"]
+
+ANONYMOUS_USER_NAME = 'Guest'
