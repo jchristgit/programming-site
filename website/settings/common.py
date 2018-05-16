@@ -22,7 +22,7 @@ from .discord import *  # noqa
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = Path(".").resolve()
 PROJECT_DIR = BASE_DIR / "website"
-IS_TESTING = ' '.join(sys.argv).endswith(("test", "test --keepdb"))
+IS_TESTING = ' '.join(sys.argv).endswith(("test", "test --keepdb")) or sys.argv[1] == 'test'
 
 
 # Application definition
