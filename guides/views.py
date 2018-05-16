@@ -13,7 +13,6 @@ from website.mixins import (
     AuthorRequiredMixin,
     MemberRequiredMixin,
 )
-from .forms import GuideForm
 from .mixins import AuthorOrEditorRequiredMixin
 from .models import Guide
 
@@ -34,7 +33,7 @@ class DetailView(AddIsAdminContextMixin, generic.DetailView):
 
 
 class CreateView(MemberRequiredMixin, generic.CreateView):
-    form_class = GuideForm
+    fields = ['title', 'overview', 'content']
     model = Guide
 
     def form_valid(self, form):
@@ -74,7 +73,7 @@ class CreateView(MemberRequiredMixin, generic.CreateView):
 
 
 class EditView(AuthorOrEditorRequiredMixin, generic.UpdateView):
-    form_class = GuideForm
+    fields = ['title', 'overview', 'content']
     model = Guide
 
     def get_success_url(self):

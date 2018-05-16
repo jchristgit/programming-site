@@ -22,8 +22,7 @@ class AuthorOrEditorRequiredMixin:
             guild_id=settings.DISCORD_GUILD_ID,
             role_id=settings.DISCORD_ADMIN_ROLE_ID,
         ).exists()
-        is_editor = guide.editors.filter(id=self.request.user.id).exists()
 
-        if not (is_author or is_admin or is_editor):
+        if not (is_author or is_admin):
             return HttpResponseForbidden()
         return super().dispatch(request, *args, **kwargs)
