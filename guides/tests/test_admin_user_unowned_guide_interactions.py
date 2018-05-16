@@ -4,7 +4,7 @@ from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from guides.models import Guide
-from stats.models import Roles, RoleMembership, Users as DiscordUser
+from stats.models import RoleMembership, Roles, Users as DiscordUser
 from . import INDEX_GUIDE_CONTEXT_NAME
 
 

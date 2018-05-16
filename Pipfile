@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [dev-packages]
-gunicorn = "==19.7.1"
+gunicorn = "==19.8.1"
 "flake8" = "*"
 "flake8-import-order" = "*"
 "flake8-bugbear" = "*"
