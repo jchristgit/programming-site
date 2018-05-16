@@ -20,6 +20,7 @@ bleach-whitelist = {git = "https://github.com/Volcyy/bleach-whitelist"}
 "psycopg2-binary" = "==2.7.4"
 django-widget-tweaks = "==1.4.2"
 django-allauth = "*"
+django-guardian = "*"
 
 [requires]
 python_version = "3.6"
