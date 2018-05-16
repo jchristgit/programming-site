@@ -13,12 +13,15 @@ class GuestUserSingleGuideTests(TestCase):
         - Guest accesses the site
     """
 
-    fixtures = ["guest_user_single_guide"]
-
-    def setUp(self):
-        self.guide = Guide.objects.first()
-        user = User.objects.filter(username="guesttestusername").first()
-        self.client.force_login(user)
+    @classmethod
+    def setUpTestData(cls):
+        cls.author = User.objects.create_user('testauthor', password='testpassword')
+        cls.guide = Guide.objects.create(
+            title='test guide',
+            overview="test guide overview",
+            content="test guide content",
+            author=cls.author
+        )
 
     def test_index_status_200(self):
         resp = self.client.get(reverse("guides:index"))

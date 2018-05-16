@@ -1,25 +1,56 @@
+from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth.models import User
 from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from guides.models import Guide
+from stats.models import GuildMembership, Users as DiscordUser
 from . import INDEX_GUIDE_CONTEXT_NAME
 
 
+@override_settings(DISCORD_GUILD_ID=55555)
 class MemberUserSingleGuideTests(TestCase):
     """
     Scenario:
         - 1 existing Guide
         - Member accesses the site
+        - Member does not own the guide
     """
 
-    fixtures = ["member_user_single_guide"]
     multi_db = True
 
+    @classmethod
+    def setUpTestData(cls):
+        discord_user_id = 42
+
+        cls.author = User.objects.create_user('testauthor', password='testpass')
+        cls.member = User.objects.create_user('testmember', password='testpass')
+        cls.discord_user = DiscordUser.objects.create(
+            user_id=discord_user_id,
+            name='test user',
+            discriminator=0000,
+            is_deleted=False,
+            is_bot=False
+        )
+        cls.guide = Guide.objects.create(
+            title="test guide",
+            overview="test overview",
+            content="test guide content",
+            author=cls.author
+        )
+        cls.guild_membership = GuildMembership.objects.create(
+            user=cls.discord_user,
+            guild_id=55555,
+            is_member=True
+        )
+        cls.social_account = SocialAccount.objects.create(
+            user=cls.member,
+            uid=discord_user_id,
+            extra_data={}
+        )
+
     def setUp(self):
-        self.guide = Guide.objects.first()
-        user = User.objects.filter(id=20).first()
-        self.client.force_login(user)
+        self.client.force_login(self.member)
 
     def test_index_status_200(self):
         resp = self.client.get(reverse("guides:index"))
@@ -54,7 +85,6 @@ class MemberUserSingleGuideTests(TestCase):
         guide_link = reverse("guides:detail", kwargs={"pk": self.guide.id})
         self.assertIn(guide_link.encode("utf-8"), resp.content)
 
-    @override_settings(DISCORD_GUILD_ID=42)
     def test_member_user_create_guide_status_200(self):
         """
         Members should be allowed to create a Guide,
@@ -65,7 +95,6 @@ class MemberUserSingleGuideTests(TestCase):
         resp = self.client.get(reverse("guides:create"))
         self.assertEqual(resp.status_code, 200)
 
-    @override_settings(DISCORD_GUILD_ID=42)
     def test_member_user_edit_guide_status_403(self):
         """
         Members should get 403 Forbidden when
@@ -76,7 +105,6 @@ class MemberUserSingleGuideTests(TestCase):
         resp = self.client.get(reverse("guides:edit", kwargs={"pk": self.guide.id}))
         self.assertEqual(resp.status_code, 403)
 
-    @override_settings(DISCORD_GUILD_ID=42)
     def test_member_user_delete_guide_status_403(self):
         """
         Members should get 403 Forbidden when

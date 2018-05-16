@@ -1,25 +1,54 @@
+from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth.models import User
-from django.test import TransactionTestCase, override_settings
+from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from guides.models import Guide
+from stats.models import GuildMembership, Users as DiscordUser
 from . import INDEX_GUIDE_CONTEXT_NAME
 
 
-class AuthorUserSingleGuideTests(TransactionTestCase):
+@override_settings(DISCORD_GUILD_ID=55555)
+class AuthorUserSingleGuideTests(TestCase):
     """
     Scenario:
         - 1 existing Guide
         - Author (also Member) of the Guide accesses the site
     """
 
-    fixtures = ["author_user_single_guide"]
     multi_db = True
 
+    @classmethod
+    def setUpTestData(cls):
+        discord_user_id = 42
+
+        cls.author = User.objects.create_user('testauthor', password='testpass')
+        cls.discord_user = DiscordUser.objects.create(
+            user_id=discord_user_id,
+            name='test user',
+            discriminator=0000,
+            is_deleted=False,
+            is_bot=False
+        )
+        cls.guide = Guide.objects.create(
+            title="test guide",
+            overview="test overview",
+            content="test guide content",
+            author=cls.author
+        )
+        cls.guild_membership = GuildMembership.objects.create(
+            user=cls.discord_user,
+            guild_id=55555,
+            is_member=True
+        )
+        cls.social_account = SocialAccount.objects.create(
+            user=cls.author,
+            uid=discord_user_id,
+            extra_data={}
+        )
+
     def setUp(self):
-        self.guide = Guide.objects.filter(id=1).first()
-        author = User.objects.filter(id=20).first()
-        self.client.force_login(author)
+        self.client.force_login(self.author)
 
     def test_index_status_200(self):
         resp = self.client.get(reverse("guides:index"))
@@ -54,7 +83,6 @@ class AuthorUserSingleGuideTests(TransactionTestCase):
         guide_link = reverse("guides:detail", kwargs={"pk": self.guide.id})
         self.assertIn(guide_link.encode("utf-8"), resp.content)
 
-    @override_settings(DISCORD_GUILD_ID=42)
     def test_author_user_get_create_guide_status_200(self):
         """
         The guide author is a member and therefore
@@ -69,7 +97,6 @@ class AuthorUserSingleGuideTests(TransactionTestCase):
         resp = self.client.get(reverse("guides:create"))
         self.assertEqual(resp.status_code, 200)
 
-    @override_settings(DISCORD_GUILD_ID=42)
     def test_author_user_get_edit_guide_status_200(self):
         """
         The author should get 200 OK when attempting
@@ -79,7 +106,6 @@ class AuthorUserSingleGuideTests(TransactionTestCase):
         resp = self.client.get(reverse("guides:edit", kwargs={"pk": self.guide.id}))
         self.assertEqual(resp.status_code, 200)
 
-    @override_settings(DISCORD_GUILD_ID=42)
     def test_member_user_get_delete_guide_status_200(self):
         """
         The author should get 200 OK when attempting
