@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load guardian_tags %}
 {% load static %}
 
 {% block og-title %}Guide: {{ guide.title }}{% endblock %}
@@ -24,33 +25,15 @@
         written by<a class="strong no-underline" href="{% url 'profiles:detail' guide.author.id %}">
           @{{ guide.author.first_name }}
         </a>
-        {% for editor in guide.editors.objects %}
-          {% if forloop.first %}
-            , edited by
-          {% endif %}
-          {% if forloop.last %}
-            and
-          {% endif %}
-          <a class="no-underline" href="{% url 'profiles:detail' editor.id %}">
-            @{{ editor.first_name }}
-          </a>
-          {% if not forloop.last %}
-            ,
-          {% endif %}
-        {% endfor %}
         on {{ guide.pub_datetime|date }}
       </cite>
     </div>
-    {% with guide.editors.all as editors %}
-      {% if guide.author == request.user or is_admin or request.user in editors %}
-        <div class="col push-right">
-          <a href="{% url 'guides:edit' guide.id %}" style="color:deepskyblue;text-decoration:none;">&#128394;</a>
-          {% if request.user not in editors %}
-            <a href="{% url 'guides:delete' guide.id %}" class="h3" style="color:red;text-decoration:none;">&times;</a>
-          {% endif %}
-        </div>
-      {% endif %}
-    {% endwith %}
+    {% if request.user == guide.author or perms.guide.change_guide %}
+      <div class="col push-right">
+        <a href="{% url 'guides:edit' guide.id %}" style="color:deepskyblue;text-decoration:none;">&#128394;</a>
+        <a href="{% url 'guides:delete' guide.id %}" class="h3" style="color:red;text-decoration:none;">&times;</a>
+      </div>
+    {% endif %}
   </div>
   <hr>
   <article>

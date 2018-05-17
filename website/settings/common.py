@@ -44,12 +44,14 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.discord",
+    "guardian",
     "widget_tweaks",
 ]
 
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
+    "guardian.backends.ObjectPermissionBackend"
 )
 
 SOCIALACCOUNT_EMAIL_VERIFICATION = "none"
@@ -165,3 +167,5 @@ MESSAGE_TAGS = {
 
 # TEST_RUNNER = 'website.runners.ManagedModelTestRunner'
 DATABASE_ROUTERS = ["website.routers.StatbotRouter"]
+
+ANONYMOUS_USER_NAME = 'Guest'
