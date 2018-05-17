@@ -123,11 +123,11 @@ class MemberUserGuideInteractionsTests(TestCase):
         )
         self.assertEqual(guide_delete_get.status_code, 200)
 
-        guide_delete_delete = self.client.delete(
+        guide_delete_post = self.client.post(
             reverse("guides:delete", kwargs={"pk": guide.id})
         )
-        self.assertEqual(guide_delete_delete.status_code, 302)
-        self.assertTrue(guide_delete_delete.url.endswith(reverse("guides:index")))
+        self.assertEqual(guide_delete_post.status_code, 302)
+        self.assertTrue(guide_delete_post.url.endswith(reverse("guides:index")))
 
         guide_detail_get = self.client.get(
             reverse("guides:detail", kwargs={"pk": guide.id})
