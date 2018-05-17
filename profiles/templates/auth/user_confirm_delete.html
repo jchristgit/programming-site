@@ -6,14 +6,14 @@
   <form method="post">
     {% csrf_token %}
     <p>Are you sure you want to permanently delete your account?</p>
-    {% if request.user.guides %}
-      <b>This will also permanently delete your following guides:</b>
+    {% for guide in request.user.guide_set.all %}
+      {% if forloop.first %}
+        <b>This will also permanently delete your following guides:</b>
+      {% endif %}
       <ul>
-        {% for guide in request.user.guides %}
-          <li><a href="{% url 'guides:detail' guide.id %}">{{ guide.title }}</a></li>
-        {% endfor %}
+        <li><a href="{% url 'guides:detail' guide.id %}">{{ guide.title }}</a></li>
       </ul>
-    {% endif %}
+    {% endfor %}
     <div class="row align-right">
       <a href="javascript:history.go(-1)" class="button col outline">No, take me back</a>
       <input type="submit" class="button col" value="Yes, delete it" />
