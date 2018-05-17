@@ -5,26 +5,19 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import reverse
 from django.urls import reverse_lazy
 from django.views import generic
+from guardian.mixins import PermissionRequiredMixin
 
 from stats.models import Users as DiscordUser
-from website.mixins import (
-    AddIsAdminContextMixin,
-    AddIsMemberContextMixin,
-    AuthorRequiredMixin,
-    MemberRequiredMixin,
-)
-from .forms import GuideForm
-from .mixins import AuthorOrEditorRequiredMixin
 from .models import Guide
 
 
-class IndexView(AddIsMemberContextMixin, AddIsAdminContextMixin, generic.ListView):
+class IndexView(generic.ListView):
     context_object_name = "latest_guides"
     model = Guide
     paginate_by = 10
 
 
-class DetailView(AddIsAdminContextMixin, generic.DetailView):
+class DetailView(generic.DetailView):
     model = Guide
 
     def get_context_data(self, **kwargs):
@@ -33,9 +26,13 @@ class DetailView(AddIsAdminContextMixin, generic.DetailView):
         return context
 
 
-class CreateView(MemberRequiredMixin, generic.CreateView):
-    form_class = GuideForm
+class CreateView(PermissionRequiredMixin, generic.CreateView):
+    fields = ['title', 'overview', 'content']
     model = Guide
+
+    permission_required = 'guides.add_guide'
+    permission_object = None
+    return_403 = True
 
     def form_valid(self, form):
         guide = form.save(commit=False)
@@ -67,15 +64,14 @@ class CreateView(MemberRequiredMixin, generic.CreateView):
             )
         return HttpResponseRedirect(detail_url)
 
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs["user"] = self.request.user
-        return kwargs
 
-
-class EditView(AuthorOrEditorRequiredMixin, generic.UpdateView):
-    form_class = GuideForm
+class EditView(PermissionRequiredMixin, generic.UpdateView):
+    fields = ['title', 'overview', 'content']
     model = Guide
+
+    permission_required = 'guides.change_guide'
+    accept_global_perms = True
+    return_403 = True
 
     def get_success_url(self):
         return reverse("guides:detail", kwargs={"pk": self.object.id})
@@ -107,16 +103,15 @@ class EditView(AuthorOrEditorRequiredMixin, generic.UpdateView):
             )
         return HttpResponseRedirect(detail_url)
 
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs["user"] = self.request.user
-        return kwargs
 
-
-class DeleteView(AuthorRequiredMixin, generic.DeleteView):
+class DeleteView(PermissionRequiredMixin, generic.DeleteView):
     model = Guide
     success_message = 'The guide "{}" was deleted successfully.'
     success_url = reverse_lazy("guides:index")
+
+    permission_required = 'guides.delete_guide'
+    accept_global_perms = True
+    return_403 = True
 
     def delete(self, *args, **kwargs):
         messages.success(

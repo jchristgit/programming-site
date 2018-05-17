@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load guardian_tags %}
 {% load static %}
 
 {% block og-title %}Programming Discord Server: Guides{% endblock %}
@@ -10,7 +11,7 @@
   <br>
   <div class="group">
     <h2 class="float-left">Guides</h2>
-    {% if is_member %}
+    {% if perms.guides.add_guide %}
       <a class="float-right button" href="{% url 'guides:create' %}">Create</a>
     {% endif %}
   </div>
@@ -27,16 +28,12 @@
               <a class="no-underline" href="{% url 'guides:detail' guide.id %}">{{ guide.title }}</a>
             </h4>
           </div>
-          {% with guide.editors.all as editors %}
-            {% if guide.author == request.user or is_admin or request.user in editors %}
-              <div class="col push-right">
-                <a href="{% url 'guides:edit' guide.id %}" style="color:deepskyblue;text-decoration:none;">&#128394;</a>
-                {% if request.user not in editors %}
-                  <a href="{% url 'guides:delete' guide.id %}" class="h3" style="color:red;text-decoration:none;">&times;</a>
-                {% endif %}
-              </div>
-            {% endif %}
-          {% endwith %}
+          {% if request.user == guide.author or perms.guides.change_guide %}
+            <div class="col push-right">
+              <a href="{% url 'guides:edit' guide.id %}" style="color:deepskyblue;text-decoration:none;">&#128394;</a>
+              <a href="{% url 'guides:delete' guide.id %}" class="h3" style="color:red;text-decoration:none;">&times;</a>
+            </div>
+          {% endif %}
         </div>
         <p class="guide-list-item-subtitle muted">
           written by <a class="strong no-underline" href="{% url 'profiles:detail' guide.author.id %}">
@@ -55,7 +52,7 @@
     <nav class="pagination align-center">
       <ul>
         {% if page_obj.has_previous %}
-          <li><a href="?page={{ page_obj.previous_page_number }}"><</a></li>
+          <li><a href="?page={{ page_obj.previous_page_number }}"></a></li>
         {% endif %}
         <li>
           <a href="#">Page <strong>{{ page_obj.number }}</strong> of <strong>{{ page_obj.paginator.num_pages }}</strong></a>

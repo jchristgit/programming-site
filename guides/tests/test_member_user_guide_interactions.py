@@ -1,10 +1,13 @@
+from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth.models import User
 from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from guides.models import Guide
+from stats.models import GuildMembership, Users as DiscordUser
 
 
+@override_settings(DISCORD_GUILD_ID=55555)
 class MemberUserGuideInteractionsTests(TestCase):
     """
     Scenario:
@@ -13,11 +16,30 @@ class MemberUserGuideInteractionsTests(TestCase):
         - Member uses guide creation, edit, and deletion views
     """
 
-    fixtures = ["member_user_no_guide"]
     multi_db = True
 
     @classmethod
     def setUpTestData(cls):
+        discord_user_id = 42
+
+        cls.user = User.objects.create_user('testmember', password='testpass')
+        cls.discord_user = DiscordUser.objects.create(
+            user_id=discord_user_id,
+            name='test user',
+            discriminator=0000,
+            is_deleted=False,
+            is_bot=False
+        )
+        cls.guild_membership = GuildMembership.objects.create(
+            user=cls.discord_user,
+            guild_id=55555,
+            is_member=True
+        )
+        cls.social_account = SocialAccount.objects.create(
+            user=cls.user,
+            uid=discord_user_id,
+            extra_data={}
+        )
         cls.guide_data = {
             "title": "test guide",
             "overview": "test guide overview",
@@ -28,10 +50,8 @@ class MemberUserGuideInteractionsTests(TestCase):
         cls.guide_data_edit = edit_data
 
     def setUp(self):
-        self.user = User.objects.first()
         self.client.force_login(self.user)
 
-    @override_settings(DISCORD_GUILD_ID=42)
     def test_member_user_can_create_guide(self):
         """
         A guild member should be able to create a Guide,
@@ -53,7 +73,6 @@ class MemberUserGuideInteractionsTests(TestCase):
             reverse("guides:detail", kwargs={"pk": guide.id}), guide_create_post.url
         )
 
-    @override_settings(DISCORD_GUILD_ID=42)
     def test_member_user_can_edit_owned_guide(self):
         """
         A guild member should be able to
@@ -85,7 +104,6 @@ class MemberUserGuideInteractionsTests(TestCase):
             )
         )
 
-    @override_settings(DISCORD_GUILD_ID=42)
     def test_member_user_can_delete_owned_guide(self):
         """
         A guild member should be able to
