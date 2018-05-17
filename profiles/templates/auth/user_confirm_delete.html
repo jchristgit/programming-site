@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block body %}
+  <br>
+  <h2>Account deletion confirmation</h2>
+  <form method="post">
+    {% csrf_token %}
+    <p>Are you sure you want to permanently delete your account?</p>
+    {% if request.user.guides %}
+      <b>This will also permanently delete your following guides:</b>
+      <ul>
+        {% for guide in request.user.guides %}
+          <li><a href="{% url 'guides:detail' guide.id %}">{{ guide.title }}</a></li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    <div class="row align-right">
+      <a href="javascript:history.go(-1)" class="button col outline">No, take me back</a>
+      <input type="submit" class="button col" value="Yes, delete it" />
+    </div>
+  </form>
+{% endblock %}
