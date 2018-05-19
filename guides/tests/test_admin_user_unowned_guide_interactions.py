@@ -121,11 +121,11 @@ class AdminUserUnownedGuideInteractionsTests(TestCase):
         )
         self.assertEqual(guide_delete_get.status_code, 200)
 
-        guide_delete_delete = self.client.delete(
+        guide_delete_post = self.client.post(
             reverse("guides:delete", kwargs={"pk": self.guide.id})
         )
         self.assertIsNone(Guide.objects.first())
-        self.assertTrue(guide_delete_delete.url.endswith(reverse("guides:index")))
+        self.assertTrue(guide_delete_post.url.endswith(reverse("guides:index")))
 
         guide_index = self.client.get(reverse("guides:index"))
         self.assertSequenceEqual(guide_index.context[INDEX_GUIDE_CONTEXT_NAME], [])
