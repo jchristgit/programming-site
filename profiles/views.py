@@ -1,10 +1,8 @@
-from django.conf import settings
+from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 from django.views import generic
-
-from stats.models import RoleMembership
 
 
 class ProfileDetailView(generic.DetailView):
@@ -12,13 +10,10 @@ class ProfileDetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["discord_role_membership"] = RoleMembership.objects.filter(
-            guild_id=settings.DISCORD_GUILD_ID, user_id=self.get_object().id
-        ).order_by(
-            "-role__position"
-        ).exclude(
-            role__name="@everyone"
-        )
+        try:
+            context['socialaccount'] = SocialAccount.objects.get(user=self.get_object())
+        except SocialAccount.DoesNotExist:
+            context['socialaccount'] = None
         return context
 
 
