@@ -9,7 +9,7 @@ from .provider import DiscordWithGuildScopeProvider
 
 
 class CustomDiscordOAuth2Adapter(OAuth2Adapter):
-    """Extends the default Discord OAuth2 adapter to request guild data in addition to user data."""
+    """Extends the default Discord OAuth adapter to request guild data in addition to user data."""
 
     provider_id = DiscordWithGuildScopeProvider.id
     access_token_url = 'https://discordapp.com/api/oauth2/token'
