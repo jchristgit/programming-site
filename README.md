@@ -25,8 +25,9 @@ Basically, you need to change the site domain of the one site
 within the database (it defaults to `example.com`, put whatever you use
 to access your local site there, probably `127.0.0.1:8000`),
 add a social application linked to the site, and you should be set.
+**Make sure that you use `discoauth` instead of `discord` for the social application.**
 Do note that you will have to set your redirect URL
-to `http://127.0.0.1:8000/accounts/discord/login/callback/`, otherwise it won't work.
+to `http://127.0.0.1:8000/accounts/discoauth/login/callback/`, otherwise it won't work.
 
 Next up, you need to set up your environment variables.
 We recommend putting these into a file called `.env`,
