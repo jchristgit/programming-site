@@ -11,15 +11,25 @@ class HomeSignalsTests(TestCase):
         no_oauth_user = User.objects.create_user('nooauthuser', password='testpassword')
         self.assertSequenceEqual(no_oauth_user.groups.all(), [])
 
-    def test_discord_guest_gets_guest_group(self):
-        member_user = User.objects.create_user('guestuser', password='testpassword')
+    def test_member_in_other_discord_gets_guest_group(self):
+        user = User.objects.create_user('guestuser', password='testpassword')
         SocialAccount.objects.create(
-            user=member_user,
+            user=user,
+            uid=42,
+            extra_data={'guilds': [{'id': '1010101010101', 'permissions': 0x8}]}
+        )
+        guest_group = Group.objects.get(name='guest')
+        self.assertSequenceEqual(user.groups.all(), [guest_group])
+
+    def test_discord_guest_gets_guest_group(self):
+        user = User.objects.create_user('guestuser', password='testpassword')
+        SocialAccount.objects.create(
+            user=user,
             uid=42,
             extra_data={'guilds': []}
         )
         guest_group = Group.objects.get(name='guest')
-        self.assertSequenceEqual(member_user.groups.all(), [guest_group])
+        self.assertSequenceEqual(user.groups.all(), [guest_group])
 
     def test_member_gets_member_group(self):
         user = User.objects.create_user('testmember', password='testpass')
@@ -32,13 +42,13 @@ class HomeSignalsTests(TestCase):
         self.assertSequenceEqual([member_group], user.groups.all())
 
     def test_staff_gets_staff_group(self):
-        admin_user = User.objects.create_user('testadmin', password='testpass')
+        user = User.objects.create_user('testadmin', password='testpass')
 
         SocialAccount.objects.create(
-            user=admin_user,
+            user=user,
             uid=42,
             extra_data={'guilds': [{'id': '55555', 'permissions': 0x8}]}
         )
 
         staff_group = Group.objects.get(name='staff')
-        self.assertSequenceEqual(admin_user.groups.all(), [staff_group])
+        self.assertSequenceEqual(user.groups.all(), [staff_group])
