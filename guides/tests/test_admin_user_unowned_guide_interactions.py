@@ -25,46 +25,18 @@ class AdminUserUnownedGuideInteractionsTests(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        discord_user_id = 42
-        discord_guild_id = 55555
-
         cls.author = User.objects.create_user('testauthor', password='testpass')
+        cls.admin_user = User.objects.create_user('testadmin', password='testpass')
         cls.guide = Guide.objects.create(
             title="test guide",
             overview="test overview",
             content="test guide content",
             author=cls.author
         )
-
-        cls.admin_user = User.objects.create_user('testadmin', password='testpass')
-        cls.staff_role = Roles.objects.create(
-            role_id=30,
-            name='test staff role',
-            color=0,
-            raw_permissions=0,
-            guild_id=discord_guild_id,
-            is_hoisted=False,
-            is_managed=False,
-            is_mentionable=False,
-            is_deleted=False,
-            position=0
-        )
-        cls.discord_user = DiscordUser.objects.create(
-            user_id=discord_user_id,
-            name='test admin user',
-            discriminator=0000,
-            is_deleted=False,
-            is_bot=False
-        )
-        cls.role_membership = RoleMembership.objects.create(
-            role=cls.staff_role,
-            guild_id=discord_guild_id,
-            user=cls.discord_user
-        )
         cls.social_account = SocialAccount.objects.create(
             user=cls.admin_user,
-            uid=discord_user_id,
-            extra_data={}
+            uid=42,
+            extra_data={'guilds': [{'id': '55555', 'permissions': 0x8}]}
         )
 
     def setUp(self):

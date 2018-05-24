@@ -4,12 +4,17 @@ from django.contrib.auth.models import Group
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from stats.models import GuildMembership, RoleMembership
+
+ADMIN_PERMISSION_BITFLAGS = 0x8
 
 
 @receiver(post_save, sender=SocialAccount)
 def social_account_post_save(sender, instance, **kwargs):
-    """Add the appropriate authentication groups to the user.
+    """Add the appropriate permission groups to the user.
+
+    Uses data returned by Discord's OAuth to add the
+    appropriate permission groups - for example, Guest,
+    Member, or Staff - depending on their guild permissions.
 
     Notes:
         See http://django-allauth.readthedocs.io/en/latest/signals.html#allauth-socialaccount.
@@ -21,32 +26,25 @@ def social_account_post_save(sender, instance, **kwargs):
         # Delete any existing groups
         user.groups.clear()
 
-        # Is the newly created user a staff member on the Discord server?
-        is_staff = RoleMembership.objects.filter(
-            user_id=instance.uid,
-            guild_id=settings.DISCORD_GUILD_ID,
-            role_id=settings.DISCORD_ADMIN_ROLE_ID,
-        ).exists()
+        guilds = instance.extra_data['guilds']
+        guild_membership = next(
+            (guild for guild in guilds if guild['id'] == str(settings.DISCORD_GUILD_ID)),
+            None
+        )
 
-        if is_staff:
+        # Is the newly created user a member of the Discord server?
+        if guild_membership is None:
+            # If not, give the user the default `guest` group
+            guest_group = Group.objects.get(name='guest')
+            user.groups.add(guest_group)
+
+        # Does the newly created user have administrator permissions?
+        elif bool(guild_membership['permissions'] & ADMIN_PERMISSION_BITFLAGS):
             # If so, fetch the `staff` group and add it to the user's groups
             staff_group = Group.objects.get(name='staff')
             user.groups.add(staff_group)
 
+        # Otherwise, the user is a regular member of the server.
         else:
-            # Is the newly created user a member of the Discord server?
-            is_member = GuildMembership.objects.filter(
-                user_id=instance.uid,
-                guild_id=settings.DISCORD_GUILD_ID,
-                is_member=True
-            ).exists()
-
-            if is_member:
-                # If so, fetch the `member` group and add it to the user's groups
-                member_group = Group.objects.get(name='member')
-                user.groups.add(member_group)
-
-            else:
-                # Otherwise, give the user the default `guest` group
-                guest_group = Group.objects.get(name='guest')
-                user.groups.add(guest_group)
+            member_group = Group.objects.get(name='member')
+            user.groups.add(member_group)
