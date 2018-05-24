@@ -4,10 +4,7 @@ from django.shortcuts import reverse
 from django.test import TestCase, override_settings
 
 
-@override_settings(
-    DISCORD_ADMIN_ROLE_ID=10,
-    DISCORD_GUILD_ID=55555
-)
+@override_settings(DISCORD_GUILD_ID=55555)
 class AdminUserHomeTests(TestCase):
     """
     Scenario:

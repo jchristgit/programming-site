@@ -3,10 +3,7 @@ from django.contrib.auth.models import Group, User
 from django.test import TestCase, override_settings
 
 
-@override_settings(
-    DISCORD_ADMIN_ROLE_ID=30,
-    DISCORD_GUILD_ID=55555
-)
+@override_settings(DISCORD_GUILD_ID=55555)
 class HomeSignalsTests(TestCase):
     multi_db = True
 

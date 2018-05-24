@@ -8,10 +8,7 @@ from stats.models import RoleMembership, Roles, Users as DiscordUser
 from . import INDEX_GUIDE_CONTEXT_NAME
 
 
-@override_settings(
-    DISCORD_ADMIN_ROLE_ID=30,
-    DISCORD_GUILD_ID=55555
-)
+@override_settings(DISCORD_GUILD_ID=55555)
 class AdminUserUnownedGuideInteractionsTests(TestCase):
     """
     Scenario:
