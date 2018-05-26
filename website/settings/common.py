@@ -171,3 +171,11 @@ MESSAGE_TAGS = {
 DATABASE_ROUTERS = ["website.routers.StatbotRouter"]
 
 ANONYMOUS_USER_NAME = 'Guest'
+
+
+# When multiple Discord users with the same username sign up,
+# Django will mangle the username to something like `person24`.
+# Displaying the first name will show the actual username as
+# returned by Discord's OAuth endpoint.
+def ACCOUNT_USER_DISPLAY(user):
+    return user.first_name

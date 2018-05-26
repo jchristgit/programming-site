@@ -38,16 +38,15 @@
 </nav>
 {% if messages %}
   {% for message in messages %}
-    <li>
-      <div class="message {{ message.tag }}" data-component="message">
-        {{ message }}
-        <span class="close small"></span>
-      </div>
-    </li>
+    <div class="message {{ message.tag }}" data-component="message">
+      {{ message }}
+      <span class="close small"></span>
+    </div>
   {% endfor %}
 {% endif %}
 {% block body %}{% endblock %}
 {% if messages %}
+  <script src="{% static 'js/jquery.min.js' %}"></script>
   <script src="{% static 'js/kube.min.js' %}"></script>
 {% endif %}
 </body>
