@@ -30,8 +30,10 @@ IS_TESTING = ' '.join(sys.argv).endswith(("test", "test --keepdb")) or sys.argv[
 INSTALLED_APPS = [
     "home.apps.HomeConfig",
     "guides.apps.GuidesConfig",
+    "oauth.apps.OauthConfig",
     "profiles.apps.ProfilesConfig",
     "stats.apps.StatsConfig",
+
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -40,10 +42,10 @@ INSTALLED_APPS = [
     "django.contrib.sites",  # required by django-allauth
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
-    "allauth.socialaccount.providers.discord",
     "guardian",
     "widget_tweaks",
 ]
