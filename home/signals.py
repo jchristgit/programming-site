@@ -5,7 +5,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
-ADMIN_PERMISSION_BITFLAGS = 0x8
+ADMIN_PERMISSION_BITFLAGS = 0x00000008
 
 
 @receiver(post_save, sender=SocialAccount)
