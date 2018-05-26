@@ -28,8 +28,8 @@ class CustomDiscordOAuth2Adapter(OAuth2Adapter):
         guild_data = requests.get(self.guild_url, headers=headers)
 
         extra_data = {
-            **profile_data.json(),
-            'guilds': guild_data.json()
+            'guilds': guild_data.json(),
+            **profile_data.json()
         }
 
         return self.get_provider().sociallogin_from_response(request, extra_data)
