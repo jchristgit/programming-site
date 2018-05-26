@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block body %}
+  <br>
+  <h1>Edit your profile</h1>
+  <p>
+    Want to edit your username or discriminator?
+    As we get this information from Discord's OAuth 2 provider, please
+    change it there and log out and back in to update
+    the OAuth 2 data that we have on our servers.
+  </p>
+  <p>
+    Alternatively, you can set the <b>Restrict processing</b>
+    flag below and request a manual change of your data if
+    there is any issue with this - however, keep in mind that
+    we may refresh this information from OAuth, overriding your changes.
+  </p>
+  <form class="form" method="post">
+    {% csrf_token %}
+    <div class="form-item">
+      <label for="id_restrict_processing">Restrict processing<span class="desc">{{ form.restrict_processing.help_text }}</span></label>
+      {% render_field form.restrict_processing %}
+    </div>
+    <input class="button" type="submit" value="Update" />
+  </form>
+{% endblock %}
