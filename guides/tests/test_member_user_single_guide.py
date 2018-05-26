@@ -4,7 +4,6 @@ from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from guides.models import Guide
-from stats.models import GuildMembership, Users as DiscordUser
 from . import INDEX_GUIDE_CONTEXT_NAME
 
 
@@ -25,28 +24,16 @@ class MemberUserSingleGuideTests(TestCase):
 
         cls.author = User.objects.create_user('testauthor', password='testpass')
         cls.member = User.objects.create_user('testmember', password='testpass')
-        cls.discord_user = DiscordUser.objects.create(
-            user_id=discord_user_id,
-            name='test user',
-            discriminator=0000,
-            is_deleted=False,
-            is_bot=False
-        )
         cls.guide = Guide.objects.create(
             title="test guide",
             overview="test overview",
             content="test guide content",
             author=cls.author
         )
-        cls.guild_membership = GuildMembership.objects.create(
-            user=cls.discord_user,
-            guild_id=55555,
-            is_member=True
-        )
         cls.social_account = SocialAccount.objects.create(
             user=cls.member,
             uid=discord_user_id,
-            extra_data={}
+            extra_data={'guilds': [{'id': '55555', 'permissions': 0x63584C0}]}
         )
 
     def setUp(self):
