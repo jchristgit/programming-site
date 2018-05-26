@@ -9,6 +9,7 @@
   {{ user.first_name }} has been a registered user on this website since {{ user.date_joined|date }}.
   Visit their profile to learn more about them.
 {% endblock %}
+
 {% block head %}
   <meta property="og:profile:username" content="{{ user.first_name }}">
   <link rel="stylesheet" type="text/css" href="{% static 'profiles/css/user_detail.css' %}">
@@ -56,4 +57,11 @@
       </ul>
     {% endif %}
   {% endfor %}
+  {% if user.restrictprocessing.restrict_processing %}
+    <br>
+    <i class="muted">
+      You currently have <strong>Restrict Processing</strong>
+      enabled, and your profile is only visible to you.
+    </i>
+  {% endif %}
 {% endblock %}
