@@ -38,7 +38,6 @@ The following are required:
 - `PGSQL_USER`
 - `PGSQL_PASSWORD`
 - `DISCORD_GUILD_ID`
-- `DISCORD_ADMIN_ROLE_ID`
 
 These should be fairly self-explanatory, but keep in mind that
 you need to point the `PGSQL_*` settings to a database used by
