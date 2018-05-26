@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-{% load home_extras %}
 {% load static %}
 
 {% block title %}{{ user.first_name }}'s profile{% endblock %}
@@ -18,24 +17,11 @@
 {% block body %}
   <br>
   {# <img src="{{ user.get_avatar_url }}"> #}
-  <h1>{{ user.first_name }}<span class="muted">#{{ user.last_name }}</span></h1>
-  {% for role_membership in discord_role_membership %}
-    {% with role_membership.role as role %}
-      {% if forloop.first %}
-        {# Is there a nice way to display these on mobile? #}
-        <div class="row hide-sm">
-      {% endif %}
-      <span class="col label outline role-label"
-            style="border-color:{{ role.color|int_to_css_colour }};
-                   background-color:{{ role.color|int_to_css_rgba }}">
-        {{ role.name }}
-      </span>
-      {% if forloop.last %}
-        </div>
-      {% endif %}
-    {% endwith %}
-  {% endfor %}
-  <br>
+  {% if socialaccount is not None %}
+    <h1>{{ user.first_name }}<span class="muted">#{{ socialaccount.extra_data.discriminator }}</span></h1>
+  {% else %}
+    <h1>{{ user.first_name }}</h1>
+  {% endif %}
   <p>
     {{ user.first_name }} has been a registered user on this website since {{ user.date_joined|date }}.
   </p>
