@@ -4,9 +4,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse, reverse_lazy
 from django.views import generic
 
-from stats.models import RoleMembership
 from .models import RestrictProcessing
-
 
 
 class ProfileDetailView(UserPassesTestMixin, generic.DetailView):
