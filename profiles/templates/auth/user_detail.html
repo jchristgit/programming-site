@@ -16,11 +16,14 @@
 
 {% block body %}
   <br>
-  {# <img src="{{ user.get_avatar_url }}"> #}
   {% if socialaccount is not None %}
+    {# <img src="{{ socialaccount.get_avatar_url }}"> #}
     <h1>{{ user.first_name }}<span class="muted">#{{ socialaccount.extra_data.discriminator }}</span></h1>
   {% else %}
     <h1>{{ user.first_name }}</h1>
+  {% endif %}
+  {% if request.user == user %}
+    <a href="{% url 'profiles:update' user.id %}" class="button">Edit profile</a>
   {% endif %}
   <p>
     {{ user.first_name }} has been a registered user on this website since {{ user.date_joined|date }}.

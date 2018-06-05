@@ -2,7 +2,11 @@
     text-decoration: none;
 }
 
-.role-label {
-    margin-right: 0.5em;
-    border-width: 0.2em;
+h1 {
+    display: inline-block;
+    margin-right: auto;
+}
+
+body > a.button {
+    float: right;
 }
