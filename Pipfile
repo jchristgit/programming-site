@@ -21,6 +21,7 @@ bleach-whitelist = {git = "https://github.com/Volcyy/bleach-whitelist"}
 django-widget-tweaks = "==1.4.2"
 django-allauth = "==0.36.0"
 django-guardian = "==1.4.9"
+django-environ = "*"
 
 [requires]
 python_version = "3.6"
