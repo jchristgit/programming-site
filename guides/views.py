@@ -20,11 +20,6 @@ class IndexView(generic.ListView):
 class DetailView(generic.DetailView):
     model = Guide
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["author_discord"] = DiscordUser.from_django_user(self.request.user)
-        return context
-
 
 class CreateView(PermissionRequiredMixin, generic.CreateView):
     fields = ['title', 'overview', 'content']
@@ -81,26 +76,6 @@ class EditView(PermissionRequiredMixin, generic.UpdateView):
         detail_url = self.request.build_absolute_uri(
             reverse("guides:detail", kwargs={"pk": self.object.id})
         )
-        if settings.DISCORD_WEBHOOK_URL is not None and not settings.IS_TESTING:
-            requests.post(
-                settings.DISCORD_WEBHOOK_URL,
-                json={
-                    "embeds": [
-                        {
-                            "title": (f'{self.object.author}\'s guide '
-                                      f'"{self.object.title}" was just updated!'),
-                            "author": {
-                                "name": self.request.user.username,
-                                "icon_url": DiscordUser.from_django_user(
-                                    self.request.user
-                                ).avatar_url(),
-                            },
-                            "url": detail_url,
-                            "color": 0x0099FF,
-                        }
-                    ]
-                },
-            )
         return HttpResponseRedirect(detail_url)
 
 

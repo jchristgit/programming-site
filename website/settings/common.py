@@ -2,8 +2,8 @@ import os
 import sys
 from pathlib import Path
 
-from django.contrib.messages import constants as message_constants
 import environ
+from django.contrib.messages import constants as message_constants
 
 from website.converters import markdownify
 from .discord import *  # noqa
