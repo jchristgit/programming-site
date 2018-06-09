@@ -47,7 +47,7 @@ class CreateView(PermissionRequiredMixin, generic.CreateView):
                             {
                                 "title": f'New Guide posted: "{guide.title}"',
                                 "author": {
-                                    "name": guide.author.username,
+                                    "name": discord_user.extra_data['username'],
                                     "icon_url": discord_user.get_avatar_url()
                                 },
                                 "url": detail_url,
