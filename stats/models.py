@@ -251,10 +251,6 @@ class Users(models.Model):
         managed = False
         db_table = "users"
 
-    @classmethod
-    def from_django_user(cls, django_user: settings.AUTH_USER_MODEL):
-        return cls.objects.using("stats").filter(user_id=django_user.id).first()
-
     def avatar_url(self, size=64):
         return f"https://cdn.discordapp.com/avatars/{self.user_id}/{self.avatar}.png?size={size}"
 

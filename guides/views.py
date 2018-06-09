@@ -1,4 +1,5 @@
 import requests
+from allauth.socialaccount.models import SocialAccount
 from django.conf import settings
 from django.contrib import messages
 from django.http import HttpResponseRedirect
@@ -7,7 +8,6 @@ from django.urls import reverse_lazy
 from django.views import generic
 from guardian.mixins import PermissionRequiredMixin
 
-from stats.models import Users as DiscordUser
 from .models import Guide
 
 
@@ -43,25 +43,25 @@ class CreateView(PermissionRequiredMixin, generic.CreateView):
             reverse("guides:detail", kwargs={"pk": guide.id})
         )
         if settings.DISCORD_WEBHOOK_URL is not None and not settings.IS_TESTING:
-            requests.post(
-                settings.DISCORD_WEBHOOK_URL,
-                json={
-                    "embeds": [
-                        {
-                            "title": f'New Guide posted: "{guide.title}"',
-                            "author": {
-                                "name": guide.author.username,
-                                "icon_url": DiscordUser.from_django_user(
-                                    self.request.user
-                                ).avatar_url(),
-                            },
-                            "url": detail_url,
-                            "description": guide.overview,
-                            "color": 0x0066CC,
-                        }
-                    ]
-                },
-            )
+            discord_user = SocialAccount.objects.filter(user=self.request.user).first()
+            if discord_user is not None:
+                requests.post(
+                    settings.DISCORD_WEBHOOK_URL,
+                    json={
+                        "embeds": [
+                            {
+                                "title": f'New Guide posted: "{guide.title}"',
+                                "author": {
+                                    "name": guide.author.username,
+                                    "icon_url": discord_user.get_avatar_url()
+                                },
+                                "url": detail_url,
+                                "description": guide.overview,
+                                "color": 0x0066CC
+                            }
+                        ]
+                    }
+                )
         return HttpResponseRedirect(detail_url)
 
 
