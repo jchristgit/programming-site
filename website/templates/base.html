@@ -26,7 +26,7 @@
       <a class="black strong" href="{% url 'profiles:detail' user.id %}">{{ request.user.first_name }}</a>@programming$
     {% else %}
       {# If the user is not logged in, provide a link to the consent view #}
-      <a class="black strong" href="/accounts/prelogin">$(YOUR_NAME)</a>@programming$
+      <a class="black strong" href="/accounts/prelogin">Log in</a>
     {% endif %}
   </code>
   <a class="nav-link" href="{% url 'home:index' %}">Home</a>
