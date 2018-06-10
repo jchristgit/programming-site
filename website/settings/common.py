@@ -75,7 +75,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ]
-        },
+        }
     }
 ]
 
@@ -125,17 +125,27 @@ AUTH_PASSWORD_VALIDATORS = [
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
     'handlers': {
+        'console': {
+            'level': 'DEBUG' if DEBUG else 'WARNING',
+            'class': 'logging.StreamHandler'
+        },
         'file': {
             'level': 'WARNING',
+            'filters': ['require_debug_false'],
             'class': 'logging.FileHandler',
             'filename': env('LOGGING_FILE', default=str(BASE_DIR / 'info.log'))
         }
     },
     'loggers': {
         'django': {
-            'handlers': ['file'],
-            'level': 'WARNING',
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG' if DEBUG else 'WARNING',
             'propagate': True
         }
     }

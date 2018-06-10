@@ -54,6 +54,8 @@ it up, you're finally able to run it locally...
 
 ## Local Development
 Finally, to start the app, simply use `python manage.py runserver`.
+Set the environment variable `DEBUG_MODE` to `1` to enable debug mode,
+for example through `DEBUG_MODE=1 python manage.py runserver`.
 
 Running tests is sadly a bit more complicated, but it's also a one-time setup.
 You need to have the environment variables 
