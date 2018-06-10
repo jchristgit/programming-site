@@ -39,6 +39,8 @@
   <article>
     {{ guide.content }}
   </article>
-  <br>
-  <i class="muted">Want to talk to <strong>{{ guide.author.first_name }}</strong> about this article? Come <a href="https://discord.gg/010z0Kw1A9ql5c1Qe">join us</a>!</i>
+  {% if request.user.is_anonymous or request.user.groups.all.0.name == 'Guest' %}
+    <br>
+    <i class="muted">Want to talk to <strong>{{ guide.author.first_name }}</strong> about this article? Come <a href="https://discord.gg/010z0Kw1A9ql5c1Qe">join us</a>!</i>
+  {% endif %}
 {% endblock %}
