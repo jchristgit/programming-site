@@ -4,6 +4,12 @@ body {
     background-color: white !important;
 }
 
+@media only screen and (max-width: 900px) {
+    .hide-on-small {
+        display: none;
+    }
+}
+
 html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

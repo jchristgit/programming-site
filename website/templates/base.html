@@ -23,7 +23,7 @@
   <code class="nav-title monospace label text-left">
     {% if request.user.is_authenticated %}
       {# If the user has their Discord account connected, show that #}
-      <a class="black strong" href="{% url 'profiles:detail' user.id %}">{{ request.user.first_name }}</a>@programming$
+      <a class="black strong" href="{% url 'profiles:detail' user.id %}">{{ request.user.first_name }}</a><span class="hide-on-small">@programming$</span>
     {% else %}
       {# If the user is not logged in, provide a link to the consent view #}
       <a class="black strong" href="/accounts/prelogin">Log in</a>
