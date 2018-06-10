@@ -8,10 +8,15 @@
     <p>Are you sure you want to permanently delete your account?</p>
     {% for guide in request.user.guide_set.all %}
       {% if forloop.first %}
-        <b>This will also permanently delete your following guides:</b>
+        <strong>
+          This will also permanently delete your following guide{{ request.user.guide_set|pluralize }}:
+        </strong>
       {% endif %}
       <ul>
-        <li><a href="{% url 'guides:detail' guide.id %}">{{ guide.title }}</a></li>
+        <li>
+          <a href="{% url 'guides:detail' guide.id %}">{{ guide.title }}</a>
+          <em>published on {{ guide.pub_datetime|date }}</em>
+        </li>
       </ul>
     {% endfor %}
     <div class="row align-right">
