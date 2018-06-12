@@ -37,7 +37,7 @@
 </nav>
 {% if messages %}
   {% for message in messages %}
-    <div class="message {{ message.tag }}" data-component="message">
+    <div class="message {{ message.level_tag }}" data-component="message">
       {{ message }}
       <span class="close small"></span>
     </div>

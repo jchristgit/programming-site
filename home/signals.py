@@ -26,20 +26,16 @@ def social_account_post_save(sender, instance, **kwargs):
         # Delete any existing groups
         user.groups.clear()
 
-        guilds = instance.extra_data['guilds']
-        guild_membership = next(
-            (guild for guild in guilds if guild['id'] == str(settings.DISCORD_GUILD_ID)),
-            None
-        )
+        guild = instance.extra_data['guild']
 
-        # Is the newly created user a member of the Discord server?
-        if guild_membership is None:
+        # Did we get any information about the guild?
+        if guild is None:
             # If not, give the user the default `guest` group
             guest_group = Group.objects.get(name='guest')
             user.groups.add(guest_group)
 
         # Does the newly created user have administrator permissions?
-        elif bool(guild_membership['permissions'] & ADMIN_PERMISSION_BITFLAGS):
+        elif bool(guild['permissions'] & ADMIN_PERMISSION_BITFLAGS):
             # If so, fetch the `staff` group and add it to the user's groups
             staff_group = Group.objects.get(name='staff')
             user.groups.add(staff_group)

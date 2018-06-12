@@ -20,7 +20,7 @@ class AdminUserHomeTests(TestCase):
         cls.social_account = SocialAccount.objects.create(
             user=cls.user,
             uid=42,
-            extra_data={'guilds': [{'id': '55555', 'permissions': 0x42674408}]}
+            extra_data={'guild': {'id': '55555', 'permissions': 0x42674408}}
         )
 
     def setUp(self):

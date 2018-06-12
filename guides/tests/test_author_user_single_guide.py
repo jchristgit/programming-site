@@ -31,7 +31,7 @@ class AuthorUserSingleGuideTests(TestCase):
         cls.social_account = SocialAccount.objects.create(
             user=cls.author,
             uid=discord_user_id,
-            extra_data={'guilds': [{'id': '55555', 'permissions': 0x63584C0}]}
+            extra_data={'guild': {'id': '55555', 'permissions': 0x63584C0}}
         )
 
     def setUp(self):

@@ -16,7 +16,7 @@ class HomeSignalsTests(TestCase):
         SocialAccount.objects.create(
             user=user,
             uid=42,
-            extra_data={'guilds': [{'id': '1010101010101', 'permissions': 0x8}]}
+            extra_data={'guild': None}
         )
         guest_group = Group.objects.get(name='guest')
         self.assertSequenceEqual(user.groups.all(), [guest_group])
@@ -26,7 +26,7 @@ class HomeSignalsTests(TestCase):
         SocialAccount.objects.create(
             user=user,
             uid=42,
-            extra_data={'guilds': []}
+            extra_data={'guild': None}
         )
         guest_group = Group.objects.get(name='guest')
         self.assertSequenceEqual(user.groups.all(), [guest_group])
@@ -36,7 +36,7 @@ class HomeSignalsTests(TestCase):
         SocialAccount.objects.create(
             user=user,
             uid=42,
-            extra_data={'guilds': [{'id': '55555', 'permissions': 0x63584C0}]}
+            extra_data={'guild': {'id': '55555', 'permissions': 0x63584C0}}
         )
         member_group = Group.objects.get(name='member')
         self.assertSequenceEqual([member_group], user.groups.all())
@@ -47,7 +47,7 @@ class HomeSignalsTests(TestCase):
         SocialAccount.objects.create(
             user=user,
             uid=42,
-            extra_data={'guilds': [{'id': '55555', 'permissions': 0x8}]}
+            extra_data={'guild': {'id': '55555', 'permissions': 0x8}}
         )
 
         staff_group = Group.objects.get(name='staff')

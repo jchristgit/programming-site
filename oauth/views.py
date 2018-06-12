@@ -4,6 +4,7 @@ from allauth.socialaccount.providers.oauth2.views import (
     OAuth2CallbackView,
     OAuth2LoginView
 )
+from django.conf import settings
 
 from .provider import DiscordWithGuildScopeProvider
 
@@ -24,12 +25,20 @@ class CustomDiscordOAuth2Adapter(OAuth2Adapter):
             'Authorization': f'Bearer {token.token}',
             'Content-Type': 'application/json'
         }
-        profile_data = requests.get(self.profile_url, headers=headers)
-        guild_data = requests.get(self.guild_url, headers=headers)
+        profile_data = requests.get(self.profile_url, headers=headers).json()
+        guild_data = requests.get(self.guild_url, headers=headers).json()
+
+        if isinstance(guild_data, list):
+            guild = next(
+                (guild for guild in guild_data if guild['id'] == settings.DISCORD_GUILD_ID),
+                None
+            )
+        else:
+            guild = None
 
         extra_data = {
-            'guilds': guild_data.json(),
-            **profile_data.json()
+            'guild': guild,
+            **profile_data
         }
 
         return self.get_provider().sociallogin_from_response(request, extra_data)

@@ -32,7 +32,7 @@ class AdminUserUnownedGuideInteractionsTests(TestCase):
         cls.social_account = SocialAccount.objects.create(
             user=cls.admin_user,
             uid=42,
-            extra_data={'guilds': [{'id': '55555', 'permissions': 0x8}]}
+            extra_data={'guild': {'id': '55555', 'permissions': 0x8}}
         )
 
     def setUp(self):
