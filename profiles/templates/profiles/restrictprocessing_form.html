@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load socialaccount %}
 {% load widget_tweaks %}
 
 {% block body %}
@@ -26,10 +27,20 @@
   </form>
   <p>
     Not happy with just making your profile invisible?
-    <strong>
-      You can delete your profile by going <a href="{% url 'profiles:delete' user.id %}">here</a>.
-    </strong>
+    You can delete your profile by clicking the big red button below.
     Don't worry, it's going to prompt you before it actually happens,
     and show you what exactly it's going to delete.
   </p>
+  {% get_social_accounts user as accounts %}
+  {% if accounts and accounts.discoauth %}
+    <a href="{% url 'profiles:delete' accounts.discoauth.0.uid %}" class="button" role="button">Delete</a>
+  {% else %}
+    {# If the user managed to visit this page, this should never happen anyways, #}
+    {# but let's provide some information regardless incase something goes wrong. #}
+    <mark>
+      There should be a delete button here, but this requires
+      a connected Discord account to generate an URL to delete
+      your account. Contact an Administrator if you encounter this text.
+    </mark>
+  {% endif %}
 {% endblock %}

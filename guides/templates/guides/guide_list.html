@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load guardian_tags %}
+{% load socialaccount %}
 {% load static %}
 
 {% block og-title %}Programming Discord Server: Guides{% endblock %}
@@ -36,9 +37,16 @@
           {% endif %}
         </div>
         <p class="guide-list-item-subtitle muted">
-          written by <a class="strong no-underline" href="{% url 'profiles:detail' guide.author.id %}">
-            @{{ guide.author.first_name }}
-          </a> on {{ guide.pub_datetime|date }}
+          written by
+          {% get_social_accounts guide.author as accounts %}
+          {% if accounts and accounts.discoauth %}
+            <a class="strong no-underline" href="{% url 'profiles:detail' accounts.discoauth.0.uid %}">
+              @{{ guide.author.first_name }}
+            </a>
+          {% else %}
+            <strong>{{ guide.author.username }}</strong>
+          {% endif %}
+          on {{ guide.pub_datetime|date }}
         </p>
         <p>{{ guide.overview }}</p>
       </li>

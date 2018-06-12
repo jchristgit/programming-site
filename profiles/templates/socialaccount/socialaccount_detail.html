@@ -22,16 +22,16 @@
   {% else %}
     <h1>{{ user.first_name }}</h1>
   {% endif %}
-  {% if request.user == user %}
-    <a href="{% url 'profiles:update' user.id %}" class="button">Edit profile</a>
+  {% if request.user == object.user %}
+    <a href="{% url 'profiles:update' object.uid %}" class="button">Edit profile</a>
   {% endif %}
   <p>
-    {{ user.first_name }} has been a registered user on this website since {{ user.date_joined|date }}.
+    {{ object.user.first_name }} has been a registered user on this website since {{ object.user.date_joined|date }}.
   </p>
-  {% for guide in user.guide_set.all %}
+  {% for guide in object.user.guide_set.all %}
     {% if forloop.first %}
       <hr>
-      <h3>Guides written by {{ user.first_name }}</h3>
+      <h3>Guides written by {{ object.user.first_name }}</h3>
       <ul>
     {% endif %}
     <li>
@@ -46,7 +46,7 @@
       </ul>
     {% endif %}
   {% endfor %}
-  {% if user.restrictprocessing.restrict_processing %}
+  {% if object.user.restrictprocessing.restrict_processing %}
     <br>
     <i class="muted">
       You currently have <strong>Restrict Processing</strong>

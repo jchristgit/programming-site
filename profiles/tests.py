@@ -1,3 +1,4 @@
+from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth.models import User
 from django.shortcuts import reverse
 from django.test import TestCase
@@ -19,9 +20,14 @@ class AnonymousUserProfilesTests(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.user = User.objects.create_user('testuser', password='testpassword')
+        cls.social_account = SocialAccount.objects.create(
+            uid=190,
+            user=cls.user,
+            extra_data={'guild': None}
+        )
 
     def test_detail_known_user_status_200(self):
-        resp = self.client.get(reverse("profiles:detail", kwargs={"pk": self.user.id}))
+        resp = self.client.get(reverse("profiles:detail", kwargs={"pk": self.social_account.uid}))
         self.assertEqual(resp.status_code, 200)
 
     def test_detail_unknown_user_status_404(self):
@@ -29,10 +35,10 @@ class AnonymousUserProfilesTests(TestCase):
         self.assertEqual(resp.status_code, 404)
 
     def test_update_known_user_status_403(self):
-        resp = self.client.get(reverse("profiles:update", kwargs={"pk": self.user.id}))
+        resp = self.client.get(reverse("profiles:update", kwargs={"pk": self.social_account.uid}))
         self.assertEqual(resp.status_code, 403)
 
-        resp = self.client.post(reverse("profiles:update", kwargs={"pk": self.user.id}))
+        resp = self.client.post(reverse("profiles:update", kwargs={"pk": self.social_account.uid}))
         self.assertEqual(resp.status_code, 403)
 
     def test_update_unknown_user_status_404(self):
@@ -43,10 +49,10 @@ class AnonymousUserProfilesTests(TestCase):
         self.assertEqual(resp.status_code, 404)
 
     def test_delete_known_user_status_403(self):
-        resp = self.client.get(reverse("profiles:delete", kwargs={"pk": self.user.id}))
+        resp = self.client.get(reverse("profiles:delete", kwargs={"pk": self.social_account.uid}))
         self.assertEqual(resp.status_code, 403)
 
-        resp = self.client.post(reverse("profiles:delete", kwargs={"pk": self.user.id}))
+        resp = self.client.post(reverse("profiles:delete", kwargs={"pk": self.social_account.uid}))
         self.assertEqual(resp.status_code, 403)
 
     def test_delete_unknown_user_status_404(self):
@@ -71,30 +77,35 @@ class GuestUserProfilesTests(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.user = User.objects.create_user('testuser', password='testpassword')
+        cls.social_account = SocialAccount.objects.create(
+            uid=1231,
+            user=cls.user,
+            extra_data={'guild': None}
+        )
         cls.original_user = User.objects.create_user('testdatabaseuser', password='testpassword')
+        cls.original_user_socialacc = SocialAccount.objects.create(
+            uid=120391,
+            user=cls.original_user,
+            extra_data={'guild': None}
+        )
 
     def setUp(self):
         self.client.force_login(self.user)
-
-    def test_detail_known_users_status_200(self):
-        resp = self.client.get(reverse("profiles:detail", kwargs={"pk": self.user.id}))
-        self.assertEqual(resp.status_code, 200)
-
-        resp = self.client.get(reverse("profiles:detail", kwargs={"pk": self.original_user.id}))
-        self.assertEqual(resp.status_code, 200)
 
     def test_detail_unknown_user_status_404(self):
         resp = self.client.get(reverse("profiles:detail", kwargs={"pk": 42}))
         self.assertEqual(resp.status_code, 404)
 
     def test_get_update_own_profile_status_200(self):
-        resp = self.client.get(reverse("profiles:update", kwargs={"pk": self.user.id}))
+        resp = self.client.get(reverse("profiles:update", kwargs={"pk": self.social_account.uid}))
         self.assertEqual(resp.status_code, 200)
 
     def test_update_unowned_profile_status_403(self):
-        resp = self.client.get(reverse("profiles:update", kwargs={"pk": self.original_user.id}))
+        kwargs = {"pk": self.original_user_socialacc.uid}
+
+        resp = self.client.get(reverse("profiles:update", kwargs=kwargs))
         self.assertEqual(resp.status_code, 403)
-        resp = self.client.post(reverse("profiles:update", kwargs={"pk": self.original_user.id}))
+        resp = self.client.post(reverse("profiles:update", kwargs=kwargs))
         self.assertEqual(resp.status_code, 403)
 
     def test_update_unknown_user_status_404(self):
@@ -104,15 +115,8 @@ class GuestUserProfilesTests(TestCase):
         self.assertEqual(resp.status_code, 404)
 
     def test_get_delete_view_for_self_status_200(self):
-        resp = self.client.get(reverse("profiles:delete", kwargs={"pk": self.user.id}))
+        resp = self.client.get(reverse("profiles:delete", kwargs={"pk": self.social_account.uid}))
         self.assertEqual(resp.status_code, 200)
-
-    def test_delete_other_user_status_403(self):
-        resp = self.client.get(reverse("profiles:delete", kwargs={"pk": self.original_user.id}))
-        self.assertEqual(resp.status_code, 403)
-
-        resp = self.client.post(reverse("profiles:delete", kwargs={"pk": self.original_user.id}))
-        self.assertEqual(resp.status_code, 403)
 
     def test_delete_unknown_user_status_404(self):
         resp = self.client.get(reverse("profiles:delete", kwargs={"pk": 42}))
@@ -120,10 +124,6 @@ class GuestUserProfilesTests(TestCase):
 
         resp = self.client.post(reverse("profiles:delete", kwargs={"pk": 42}))
         self.assertEqual(resp.status_code, 404)
-
-    def test_detail_context(self):
-        resp = self.client.get(reverse("profiles:detail", kwargs={"pk": self.user.id}))
-        self.assertEqual(resp.context["user"], self.user)
 
 
 class RestrictProcessingTests(TestCase):
@@ -140,9 +140,14 @@ class RestrictProcessingTests(TestCase):
         restrict_processing_obj = RestrictProcessing.objects.get(user=cls.user)
         restrict_processing_obj.restrict_processing = True
         restrict_processing_obj.save()
+        cls.social_account = SocialAccount.objects.create(
+            uid=42,
+            user=cls.user,
+            extra_data={'guild': None}
+        )
 
     def test_detail_returns_403(self):
-        resp = self.client.get(reverse("profiles:detail", kwargs={"pk": self.user.id}))
+        resp = self.client.get(reverse("profiles:detail", kwargs={"pk": self.social_account.uid}))
         self.assertEqual(resp.status_code, 403)
 
 
@@ -156,15 +161,20 @@ class UserProfileDeletionTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.user = User.objects.create_user('testuser', password='testpassword')
+        cls.social_account = SocialAccount.objects.create(
+            uid=109231,
+            user=cls.user,
+            extra_data={'guild': None}
+        )
 
     def setUp(self):
         self.client.force_login(self.user)
 
     def test_user_can_delete_own_profile(self):
-        resp = self.client.get(reverse("profiles:delete", kwargs={"pk": self.user.id}))
+        resp = self.client.get(reverse("profiles:delete", kwargs={"pk": self.social_account.uid}))
         self.assertEqual(resp.status_code, 200)
 
-        resp = self.client.post(reverse("profiles:delete", kwargs={"pk": self.user.id}))
+        resp = self.client.post(reverse("profiles:delete", kwargs={"pk": self.social_account.uid}))
         self.assertEqual(resp.status_code, 302)
         self.assertRedirects(resp, reverse('home:index'))
 
@@ -181,16 +191,21 @@ class UserProfileUpdateTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.user = User.objects.create_user('testuser', password='testpassword')
+        cls.social_account = SocialAccount.objects.create(
+            uid=12931,
+            user=cls.user,
+            extra_data={'guild': None}
+        )
 
     def setUp(self):
         self.client.force_login(self.user)
 
     def test_user_can_update_own_profile(self):
-        resp = self.client.get(reverse("profiles:update", kwargs={"pk": self.user.id}))
+        resp = self.client.get(reverse("profiles:update", kwargs={"pk": self.social_account.uid}))
         self.assertEqual(resp.status_code, 200)
 
         resp = self.client.post(
-            reverse("profiles:update", kwargs={"pk": self.user.id}),
+            reverse("profiles:update", kwargs={"pk": self.social_account.uid}),
             data={'restrict_processing': True}
         )
         self.assertEqual(resp.status_code, 302)
@@ -198,7 +213,7 @@ class UserProfileUpdateTest(TestCase):
         self.assertTrue(restrict_processing_object.restrict_processing)
 
 
-class UserProfileRestrictProcessingTest(TestCase):
+class MemberProfileRestrictProcessingTest(TestCase):
     """
     Scenario:
         - user with restrict processing enabled visits the site
@@ -208,10 +223,18 @@ class UserProfileRestrictProcessingTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.user = User.objects.create_user('testuser', password='testpassword')
+        cls.social_account = SocialAccount.objects.create(
+            uid=123091,
+            user=cls.user,
+            extra_data={'guild': None}
+        )
+        restrict_processing_obj = RestrictProcessing.objects.get(user=cls.user)
+        restrict_processing_obj.restrict_processing = True
+        restrict_processing_obj.save()
 
     def setUp(self):
         self.client.force_login(self.user)
 
-    def test_user_can_visit_own_profile(self):
-        resp = self.client.get(reverse("profiles:detail", kwargs={"pk": self.user.id}))
+    def test_can_visit_own_profile(self):
+        resp = self.client.get(reverse('profiles:detail', kwargs={'pk': self.social_account.uid}))
         self.assertEqual(resp.status_code, 200)

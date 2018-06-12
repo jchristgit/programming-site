@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load guardian_tags %}
+{% load socialaccount %}
 {% load static %}
 
 {% block og-title %}{{ guide.title }}{% endblock %}
@@ -22,9 +23,14 @@
     {# <img class="small author-image" src="{{ author_discord.avatar_url }}"> #}
     <div class="col">
       <cite class="h5">
-        written by<a class="strong no-underline" href="{% url 'profiles:detail' guide.author.id %}">
-          @{{ guide.author.first_name }}
-        </a>
+        {% get_social_accounts guide.author as accounts %}
+        {% if accounts and accounts.discoauth %}
+          written by<a class="strong no-underline" href="{% url 'profiles:detail' accounts.discoauth.0.uid %}">
+            @{{ guide.author.first_name }}
+          </a>
+        {% else %}
+          written by <strong>{{ guide.author.username }}</strong>
+        {% endif %}
         on {{ guide.pub_datetime|date }}
       </cite>
     </div>

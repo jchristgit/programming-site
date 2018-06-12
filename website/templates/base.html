@@ -1,4 +1,5 @@
 {% load static %}
+{% load socialaccount %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,7 +24,16 @@
   <code class="nav-title monospace label text-left">
     {% if request.user.is_authenticated %}
       {# If the user has their Discord account connected, show that #}
-      <a class="black strong" href="{% url 'profiles:detail' user.id %}">{{ request.user.first_name }}</a><span class="hide-on-small">@programming$</span>
+      {% get_social_accounts request.user as accounts %}
+      {% if accounts and accounts.discoauth %}
+        <a
+          class="black strong"
+          href="{% url 'profiles:detail' accounts.discoauth.0.uid %}"
+          >{{ request.user.first_name }}</a
+        ><span class="hide-on-small">@programming$</span>
+      {% else %}
+        {{ request.user.username }}<span class="hide-on-small">@programming$</span>
+      {% endif %}
     {% else %}
       {# If the user is not logged in, provide a link to the consent view #}
       <a class="black strong" href="/accounts/prelogin">Log in</a>
