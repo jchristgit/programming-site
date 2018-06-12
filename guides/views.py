@@ -22,7 +22,7 @@ class DetailView(generic.DetailView):
 
 
 class CreateView(PermissionRequiredMixin, generic.CreateView):
-    fields = ['title', 'overview', 'content']
+    fields = ('title', 'overview', 'content')
     model = Guide
 
     permission_required = 'guides.add_guide'
@@ -61,7 +61,7 @@ class CreateView(PermissionRequiredMixin, generic.CreateView):
 
 
 class EditView(PermissionRequiredMixin, generic.UpdateView):
-    fields = ['title', 'overview', 'content']
+    fields = ('title', 'overview', 'content')
     model = Guide
 
     permission_required = 'guides.change_guide'
