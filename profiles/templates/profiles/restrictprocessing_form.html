@@ -24,4 +24,12 @@
     </div>
     <input class="button" type="submit" value="Update" />
   </form>
+  <p>
+    Not happy with just making your profile invisible?
+    <strong>
+      You can delete your profile by going <a href="{% url 'profiles:delete' user.id %}">here</a>.
+    </strong>
+    Don't worry, it's going to prompt you before it actually happens,
+    and show you what exactly it's going to delete.
+  </p>
 {% endblock %}
