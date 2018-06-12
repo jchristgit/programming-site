@@ -5,7 +5,7 @@
 {% block og-title %}Programming Discord Server: {{ user.first_name }}'s profile{% endblock %}
 {% block og-type %}profile{% endblock %}
 {% block og-description %}
-  {{ user.first_name }} has been a registered user on this website since {{ user.date_joined|date }}.
+  {{ object.user.first_name }} has been a registered user on this website since {{ object.user.date_joined|date }}.
   Visit their profile to learn more about them.
 {% endblock %}
 
@@ -18,9 +18,9 @@
   <br>
   {% if socialaccount is not None %}
     {# <img src="{{ socialaccount.get_avatar_url }}"> #}
-    <h1>{{ user.first_name }}<span class="muted">#{{ socialaccount.extra_data.discriminator }}</span></h1>
+    <h1>{{ object.user.first_name }}<span class="muted">#{{ socialaccount.extra_data.discriminator }}</span></h1>
   {% else %}
-    <h1>{{ user.first_name }}</h1>
+    <h1>{{ object.user.first_name }}</h1>
   {% endif %}
   {% if request.user == object.user %}
     <a href="{% url 'profiles:update' object.uid %}" class="button">Edit profile</a>
