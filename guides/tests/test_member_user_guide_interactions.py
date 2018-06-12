@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from allauth.socialaccount.models import SocialAccount
 from django.contrib.auth.models import User
 from django.test import TestCase, override_settings
@@ -14,8 +16,6 @@ class MemberUserGuideInteractionsTests(TestCase):
         - Member accesses the site
         - Member uses guide creation, edit, and deletion views
     """
-
-    multi_db = True
 
     @classmethod
     def setUpTestData(cls):
@@ -118,3 +118,85 @@ class MemberUserGuideInteractionsTests(TestCase):
             reverse("guides:detail", kwargs={"pk": guide.id})
         )
         self.assertEqual(guide_detail_get.status_code, 404)
+
+    def test_member_cannot_change_excluded_fields_on_creation(self):
+        """
+        A bunch of fields are not supposed to be editable
+        by the members, albeit being visible elsewhere -
+        for example, the author ID or creation / publication
+        date. We ensure here that the member cannot tamper
+        with any of that data by submitting it anyways despite
+        not being in the HTML form.
+        """
+
+        tampered_creation_date = datetime.utcnow()
+        post_data = {
+            'id': 41092,
+            'title': "test guide",
+            'overview': "test guide overview",
+            'content': "test guide content",
+            'author_id': 13920,
+            'pub_datetime': tampered_creation_date,
+            'edit_datetime': tampered_creation_date
+        }
+
+        resp = self.client.post(
+            reverse('guides:create'), data=post_data, follow=True
+        )
+        created_guide = resp.context['object']
+        self.assertEqual(created_guide.title, "test guide")
+        self.assertEqual(created_guide.overview, "test guide overview")
+        self.assertEqual(created_guide.content.raw, "test guide content")
+        self.assertEqual(created_guide.author, self.user)
+        self.assertNotEqual(created_guide.pub_datetime, tampered_creation_date)
+        self.assertNotEqual(created_guide.edit_datetime, tampered_creation_date)
+        self.assertNotEqual(created_guide.id, 41092)
+
+
+class MemberUserCannotUpdateGuideDataTests(TestCase):
+    """Ensure that a member cannot update excluded fields on a guide."""
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.create_user('testmember', password='testpass')
+        cls.social_account = SocialAccount.objects.create(
+            user=cls.user,
+            uid=42,
+            extra_data={'guild': {'id': '55555', 'permissions': 0x63584C0}}
+        )
+        cls.guide = Guide.objects.create(
+            title="Test guide",
+            overview="Test guide overview",
+            content="Test guide content",
+            author=cls.user
+        )
+
+    def setUp(self):
+        self.client.force_login(self.user)
+
+    def test_member_cannot_change_excluded_fields_on_update(self):
+        """Ensures that the member cannot edit excluded fields when updating a guide."""
+
+        tampered_edit_date = datetime.utcnow()
+        data = {
+            'id': 192031029321,
+            'title': "random test guide",
+            'overview': "another test overview",
+            'content': "more test content",
+            'author_id': 2941,
+            'pub_datetime': tampered_edit_date,
+            'edit_datetime': tampered_edit_date
+        }
+
+        resp = self.client.post(
+            reverse('guides:edit', kwargs={'pk': self.guide.id}), data=data, follow=True
+        )
+        created_guide = resp.context['object']
+
+        self.assertEqual(created_guide.title, data['title'])
+        self.assertEqual(created_guide.overview, data['overview'])
+        self.assertEqual(created_guide.content.raw, data['content'])
+        self.assertEqual(created_guide.author, self.user)
+        self.assertNotEqual(created_guide.pub_datetime, tampered_edit_date)
+        self.assertNotEqual(created_guide.edit_datetime, tampered_edit_date)
+        self.assertNotEqual(created_guide.id, 41092)

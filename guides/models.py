@@ -15,9 +15,9 @@ class Guide(models.Model):
         markup_type="markdown",
         help_text="Markdown with fenced code blocks (GFM) is supported.",
     )
-    pub_datetime = models.DateTimeField(auto_now_add=True, editable=False)
-    edit_datetime = models.DateTimeField(auto_now=True, editable=False)
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, editable=False)
+    pub_datetime = models.DateTimeField(auto_now_add=True)
+    edit_datetime = models.DateTimeField(auto_now=True)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
