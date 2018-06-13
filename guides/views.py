@@ -16,6 +16,7 @@ class IndexView(generic.ListView):
     model = Guide
     paginate_by = 10
 
+
 class SearchView(generic.ListView):
     context_object_name = 'latest_guides'
     model = Guide
