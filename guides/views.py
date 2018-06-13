@@ -22,7 +22,10 @@ class SearchView(generic.ListView):
 
     def get_queryset(self):
         term = self.request.GET.get('term')
-        guides = self.model.objects.filter(title__icontains=term)
+        if term.lower() == 'all':
+            guides = self.model.objects.all()
+        else:
+            guides = self.model.objects.filter(title__icontains=term)
         return guides
 
 
