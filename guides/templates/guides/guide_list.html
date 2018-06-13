@@ -18,6 +18,14 @@
   </div>
   <p class="large">Here we collect community-driven guides and tutorials for programming, our server, and more. Want to add something? Feel free to write your own!</p>
   <h3>New Guides</h3>
+  <hr>
+  <form action="{% url 'guides:search' %}" method="GET">
+      <div id="search-key">
+        <input type="text" placeholder="Search guides" name="term">
+      </div>
+      <input type="submit" value="Search" id="search-button">
+  </form>
+  <hr>
   {% for guide in latest_guides %}
     {% if forloop.first %}
       <ul class="guide-list">

@@ -16,6 +16,15 @@ class IndexView(generic.ListView):
     model = Guide
     paginate_by = 10
 
+class SearchView(generic.ListView):
+    context_object_name = 'latest_guides'
+    model = Guide
+
+    def get_queryset(self):
+        term = self.request.GET.get('term')
+        guides = self.model.objects.filter(title__icontains=term)
+        return guides
+
 
 class DetailView(generic.DetailView):
     model = Guide

@@ -14,3 +14,15 @@
 .no-underline {
     text-decoration: none;
 }
+
+#search-button{
+    position: relative;
+    right: -535px;
+    top: -40px;
+    color: white;
+    background-color: #1c86f2;
+}
+
+#search-key{
+    width: 90%;
+}

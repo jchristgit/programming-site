@@ -13,4 +13,5 @@ urlpatterns = [
     path("<int:pk>/delete", views.DeleteView.as_view(), name="delete"),
     path("feed/atom", LatestGuidesAtomFeed(), name="feed_atom"),
     path("feed/rss", LatestGuidesRSSFeed(), name="feed_rss"),
+    path("search/", views.SearchView.as_view(), name='search')
 ]
