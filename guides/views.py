@@ -16,14 +16,9 @@ class IndexView(generic.ListView):
     model = Guide
     paginate_by = 10
 
-
-class SearchView(generic.ListView):
-    context_object_name = 'latest_guides'
-    model = Guide
-
     def get_queryset(self):
         term = self.request.GET.get('term')
-        if term.lower() == 'all':
+        if not term:
             guides = self.model.objects.all()
         else:
             guides = self.model.objects.filter(title__icontains=term)
