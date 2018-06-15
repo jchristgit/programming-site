@@ -11,7 +11,6 @@
 {% block body %}
   <br>
   <div class="group">
-      <hr>
     <h2 class="float-left">Guides</h2>
     {% if perms.guides.add_guide %}
       <a class="float-right button" href="{% url 'guides:create' %}">Create</a>
