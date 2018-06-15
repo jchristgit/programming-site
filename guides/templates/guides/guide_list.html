@@ -17,6 +17,17 @@
     {% endif %}
   </div>
   <p class="large">Here we collect community-driven guides and tutorials for programming, our server, and more. Want to add something? Feel free to write your own!</p>
+  <form action="{% url 'guides:index' %}" method="GET">
+      <div class="group">
+          <div id="search-key">
+            <input type="text" placeholder="Search guides" name="term">
+            <div>
+                <input class="float-right" id="search-button" type="submit" value="Search">
+              </div>
+          </div>
+          <br>
+      </div>
+    </form>
   <h3>New Guides</h3>
   {% for guide in latest_guides %}
     {% if forloop.first %}

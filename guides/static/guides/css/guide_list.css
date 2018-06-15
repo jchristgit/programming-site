@@ -14,3 +14,26 @@
 .no-underline {
     text-decoration: none;
 }
+
+#search-button{
+    position: relative;
+    top: -40px;
+    background-color: #1c86f2;
+    color: white;
+    width: 90px;
+}
+
+#search-key{
+    width: 600px;
+    position: relative;
+    bottom: -25px;
+}
+
+@media screen and (max-width: 768px){
+    #search-button{
+        right: -300px;
+    }
+    #search-key{
+        width: 390px;
+    }
+}

@@ -16,6 +16,14 @@ class IndexView(generic.ListView):
     model = Guide
     paginate_by = 10
 
+    def get_queryset(self):
+        term = self.request.GET.get('term')
+        if not term:
+            guides = self.model.objects.all()
+        else:
+            guides = self.model.objects.filter(title__icontains=term)
+        return guides
+
 
 class DetailView(generic.DetailView):
     model = Guide
