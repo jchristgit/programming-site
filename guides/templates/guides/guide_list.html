@@ -11,17 +11,6 @@
 {% block body %}
   <br>
   <div class="group">
-      <form action="{% url 'guides:index' %}" method="GET">
-        <div class="group">
-            <div id="search-key">
-              <input type="text" placeholder="Search guides" name="term">
-            </div>
-            <br>
-            <div>
-              <input class="float-right" id="search-button" type="submit" value="Search">
-            </div>
-        </div>
-      </form>
       <hr>
     <h2 class="float-left">Guides</h2>
     {% if perms.guides.add_guide %}
@@ -29,6 +18,17 @@
     {% endif %}
   </div>
   <p class="large">Here we collect community-driven guides and tutorials for programming, our server, and more. Want to add something? Feel free to write your own!</p>
+  <form action="{% url 'guides:index' %}" method="GET">
+      <div class="group">
+          <div id="search-key">
+            <input type="text" placeholder="Search guides" name="term">
+            <div>
+                <input class="float-right" id="search-button" type="submit" value="Search">
+              </div>
+          </div>
+          <br>
+      </div>
+    </form>
   <h3>New Guides</h3>
   <hr>
   {% for guide in latest_guides %}
