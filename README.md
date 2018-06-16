@@ -33,10 +33,7 @@ Next up, you need to set up your environment variables.
 We recommend putting these into a file called `.env`,
 since `pipenv` loads variables contained there automatically.
 The following are required:
-- `PGSQL_DBNAME`
-- `PGSQL_HOST`
-- `PGSQL_USER`
-- `PGSQL_PASSWORD`
+- `PGSQL_URL` (in the form `postgres://user:pass@host/dbname`)
 - `DISCORD_GUILD_ID`
 
 These should be fairly self-explanatory, but keep in mind that
@@ -54,15 +51,12 @@ it up, you're finally able to run it locally...
 
 ## Local Development
 Finally, to start the app, simply use `python manage.py runserver`.
-Set the environment variable `DEBUG_MODE` to `1` to enable debug mode,
-for example through `DEBUG_MODE=1 python manage.py runserver`.
+Set the environment variable `DEBUG` to `1` to enable debug mode,
+for example with `DEBUG=1 python manage.py runserver`.
 
 Running tests is sadly a bit more complicated, but it's also a one-time setup.
 You need to have the environment variables 
-- `PGSQL_TEST_DBNAME`
-- `PGSQL_TEST_HOST`
-- `PGSQL_TEST_USER`
-- `PGSQL_TEST_PASSWORD`
+- `PGSQL_TEST_URL` (in the form `postgres://user:pass@host/dbname`)
 
 set, which should be self-explanatory. Do *not* point these to the
 same values that you were using above. Bad idea.
