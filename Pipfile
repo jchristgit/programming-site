@@ -11,7 +11,7 @@ gunicorn = "==19.8.1"
 
 [packages]
 Django = "==2.0.6"
-requests = "==2.18.4"
+requests = "==2.19.1"
 django-markupfield = "==1.4.3"
 Markdown = "==2.6.11"
 Pygments = "==2.2.0"
