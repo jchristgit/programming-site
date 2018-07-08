@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "24a1b7710e4d54b631f14b236f97d9e8cc5c6978b20b2379a8127b41c7fe1ade"
+            "sha256": "ba42aab8f677c205209a86b7c9b7f1107f0aaa594fdbaceb6c3eb8aa1f59df53"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -26,7 +26,7 @@
         },
         "bleach-whitelist": {
             "git": "https://github.com/Volcyy/bleach-whitelist",
-            "ref": "87bbe00e9cafdcbf0890b6990b6ecca5aba6b980"
+            "ref": "5da03c843ebe9f80e1ff0bbec3bde1c15d93bf73"
         },
         "certifi": {
             "hashes": [
@@ -193,7 +193,6 @@
                 "sha256:8886bfec5ad7afb391ed5443b1f697c6f4ae98d0e5620839d8b4499c032ada3f",
                 "sha256:e21232e2465808c0e892e0e4dbb8c2faafec16ac6dc067dd546e9b466f3deac8"
             ],
-            "markers": "python_version != '3.0.*' and python_version != '3.3.*' and python_version >= '2.6' and python_version < '4' and python_version != '3.1.*' and python_version != '3.2.*'",
             "version": "==1.0.0"
         },
         "six": {
@@ -208,7 +207,7 @@
                 "sha256:a68ac5e15e76e7e5dd2b8f94007233e01effe3e50e8daddf69acfd81cb686baf",
                 "sha256:b5725a0bd4ba422ab0e66e89e030c806576753ea3ee08554382c14e685d117b5"
             ],
-            "markers": "python_version != '3.0.*' and python_version != '3.3.*' and python_version >= '2.6' and python_version < '4' and python_version != '3.1.*' and python_version != '3.2.*'",
+            "markers": "python_version >= '2.6' and python_version != '3.1.*' and python_version < '4' and python_version != '3.0.*' and python_version != '3.2.*' and python_version != '3.3.*'",
             "version": "==1.23"
         },
         "webencodings": {
