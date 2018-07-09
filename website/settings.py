@@ -91,7 +91,7 @@ if not IS_TESTING:
 else:
     DATABASES['stats'] = env.db('PGSQL_TEST_URL')
 
-if not DEBUG and not IS_TESTING:
+if not (DEBUG or IS_TESTING or env.bool('PGSQL_NO_SSL')):
     DATABASES['stats']['OPTIONS'] = {'sslmode': 'require'}
 
 
@@ -157,7 +157,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [PROJECT_DIR / 'static']
+STATICFILES_DIRS = [str(PROJECT_DIR / 'static')]
 SITE_ID = 1
 STATIC_ROOT = env('STATIC_ROOT', default=str(BASE_DIR / 'static'))
 
