@@ -116,7 +116,7 @@ LOGGING = {
     },
     'handlers': {
         'console': {
-            'level': 'DEBUG' if DEBUG else 'WARNING',
+            'level': getattr(logging, env('LOG_LEVEL', default='DEBUG' if DEBUG else 'WARNING')),
             'class': 'logging.StreamHandler'
         },
         'file': {
