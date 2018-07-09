@@ -1,11 +1,7 @@
 FROM kennethreitz/pipenv
 
-COPY . /site
-WORKDIR /site
+ENV PYTHONUNBUFFERED 1
 
-RUN pipenv clean
-RUN pipenv sync
+COPY . /app
 
-EXPOSE 80
-
-CMD ["pipenv", "run", "python", "manage.py", "runserver"]
+CMD ["python3", "manage.py", "runserver"]
