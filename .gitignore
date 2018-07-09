@@ -4,3 +4,4 @@ __pycache__
 .env
 .venv
 *.log
+statbot_config.yaml
